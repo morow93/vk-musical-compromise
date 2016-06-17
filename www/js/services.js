@@ -1,50 +1,36 @@
-angular.module('starter.services', [])
+(function() {
 
-.factory('Chats', function() {
-  // Might use a resource here that returns a JSON array
+    "use strict";
 
-  // Some fake testing data
-  var chats = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
-    id: 1,
-    name: 'Max Lynx',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    name: 'Adam Bradleyson',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    name: 'Perry Governor',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }, {
-    id: 4,
-    name: 'Mike Harrington',
-    lastText: 'This is wicked good ice cream.',
-    face: 'img/mike.png'
-  }];
+    angular.module('starter.services', ['LocalStorageModule']);
 
-  return {
-    all: function() {
-      return chats;
-    },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+    friendService.$inject = ["$q", "$http", "localStorageService"];
+
+    angular.module("starter.services").factory("FriendService", friendService);
+
+    function friendService($q, $http, localStorageService) {
+
+      var factory = {
+        get: get
+      };
+
+      function get() {
+        var deferred = $q.defer();
+        var userInfo = localStorageService.get("authInfo");
+        if (userInfo){
+          $http.get('https://api.vk.com/method/friends.get?order=name&fields=photo_100,nickname&access_token=' + userInfo["access_token"]).then(function (res) {
+            deferred.resolve(res.data);
+          }).catch(function(err){
+            deferred.reject(err);
+          });
+        }else{
+          deferred.reject({ error: "empty_auth_info"});
         }
+        return deferred.promise;
       }
-      return null;
+
+      return factory;
+
     }
-  };
-});
+
+})();

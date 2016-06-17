@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordovaOauth'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordovaOauth', 'LocalStorageModule'])
 
-.run(['$ionicPlatform', '$cordovaOauth', function($ionicPlatform, $cordovaOauth) {
+.run(['$ionicPlatform', '$cordovaOauth', 'localStorageService', function($ionicPlatform, $cordovaOauth, localStorageService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,23 +16,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       cordova.plugins.Keyboard.disableScroll(true);
 
     }
+
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
 
-    $cordovaOauth.vkontakte("5509706", ["email","access_token"]).then(function(result) {
-      debugger;
-      alert(JSON.stringify(result));
-    }, function(error) {
-      debugger;
-      alert(error);
-    });
-
+    // Vk authorization
+    var authInfo = localStorageService.get("authInfo");
+    if (!authInfo || (authInfo && authInfo["expires_at"] < new Date())){
+      $cordovaOauth.vkontakte("5509706", ["email", "user_id", "access_token"]).then(function(result) {
+        result["expires_at"] = moment().add(result["expires_in"] - 10, 'seconds').toDate();
+        localStorageService.set("authInfo", result);
+      }, function(error) {
+        localStorageService.remove("authInfo");
+        alert(error);
+      });
+    }
   });
 }])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -59,34 +63,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.friends', {
+      url: '/friends',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-friends': {
+          templateUrl: 'templates/friends.html',
+          controller: 'FriendsCtrl'
         }
       }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
-      }
-    }
-  });
+    });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
