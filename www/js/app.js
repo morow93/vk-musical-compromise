@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordovaOauth', 'LocalStorageModule'])
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'ngCordovaOauth', 'LocalStorageModule'])
 
-.run(['$ionicPlatform', '$cordovaOauth', 'localStorageService', function($ionicPlatform, $cordovaOauth, localStorageService) {
+.run(['$ionicPlatform', '$cordovaOauth', 'AuthService', 'ToastrService', function($ionicPlatform, $cordovaOauth, authService, toastrService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -22,37 +22,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       StatusBar.styleDefault();
     }
 
-    // Vk authorization
-    var authInfo = localStorageService.get("authInfo");
-    if (!authInfo || (authInfo && authInfo["expires_at"] < new Date())){
-      $cordovaOauth.vkontakte("5509706", ["email", "user_id", "access_token"]).then(function(result) {
-        result["expires_at"] = moment().add(result["expires_in"] - 10, 'seconds').toDate();
-        localStorageService.set("authInfo", result);
-      }, function(error) {
-        localStorageService.remove("authInfo");
-        alert(error);
-      });
-    }
+    authService.run().then(function(res){
+      toastrService.show('You got vk token!');
+    }).catch(function(err) {
+      toastrService.show('Opps! Error while getting vk token!');
+    });
+
   });
+
 }])
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
   $stateProvider
-
-  // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'
   })
-
-  // Each tab has its own nav history stack:
-
   .state('tab.dash', {
     url: '/dash',
     views: {
@@ -62,7 +49,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-
   .state('tab.friends', {
       url: '/friends',
       views: {
@@ -73,7 +59,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     });
 
-  // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
 });
