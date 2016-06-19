@@ -1,1 +1,11 @@
-/* Empty. Add your own CSS if you like */
+.item-checkbox-img {
+  vertical-align: middle;
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  height:100%;
+  border-radius: 50px;
+}
+.custom-spinner{
+  text-align: center;
+}

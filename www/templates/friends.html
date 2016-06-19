@@ -7,14 +7,19 @@
       <label class="item item-input">
         <input type="text" placeholder="Search" ng-model="searchTerm.$">
       </label>
-      <ion-list>
-        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends | filter:searchTerm:strict" type="item-text-wrap">
-          <img ng-src="{{friend['photo_100']}}">
+      
+      <ion-list ng-repeat="friend in friends | filter:searchTerm:strict" type="item-text-wrap">
+        <!--class="item-remove-animate item-avatar item-icon-right"-->
+          <ion-checkbox>
+            <span ng-bind="friend['first_name']"></span>
+            <span ng-bind="friend['last_name']"></span>
+          <img class="item-checkbox-img" src="{{friend['photo_100']}}">
+          </ion-checkbox>
+          <!-- <img ng-src="{{friend['photo_100']}}">
           <h2>
             <span ng-bind="friend['first_name']"></span>
             <span ng-bind="friend['last_name']"></span>
-          </h2>
-        </ion-item>
+          </h2> -->
       </ion-list>
     </section>
 
@@ -27,7 +32,7 @@
 
     <!--Loading-->
     <section ng-if="!loaded">
-      <ion-spinner class="padding" icon="lines"></ion-spinner>
+      <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>
 
   </ion-content>

@@ -23,9 +23,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     }
 
     authService.run().then(function(res){
-      toastrService.show('You got vk token!');
+      //toastrService.show('You got vk token!');
     }).catch(function(err) {
-      toastrService.show('Opps! Error while getting vk token!');
+      //toastrService.show('Opps! Error while getting vk token!');
     });
 
   });
