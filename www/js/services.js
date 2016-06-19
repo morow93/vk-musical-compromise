@@ -7,10 +7,12 @@
     friendService.$inject = ["$q", "$http", "localStorageService"];
     authService.$inject = ["$q", "$cordovaOauth", "localStorageService"];
     toastrService.$inject = ["$cordovaToast"];
+    playlistService.$inject = ["localStorageService"];
 
     angular.module("starter.services").factory("FriendService", friendService);
     angular.module("starter.services").factory("AuthService", authService);
     angular.module("starter.services").factory("ToastrService", toastrService);
+    angular.module("starter.services").factory("PlaylistService", playlistService);
 
     function friendService($q, $http, localStorageService) {
 
@@ -82,6 +84,62 @@
         }catch(err){
           alert(title);
         }
+      }
+
+      return factory;
+
+    }
+
+    function playlistService(localStorageService) {
+
+      var factory = {
+        create: create,
+        get: get,
+        remove: remove
+      };
+
+      function create(item) {
+        if (item){
+          item.playlistId = guid();
+          var playlists = localStorageService.get("playlists");
+          if (playlists){
+            playlists.push(item);
+          }else{
+            playlists = [item];
+          }
+          localStorageService.set("playlists", playlists);
+        }
+      }
+
+      function get() {
+        var playlists = localStorageService.get("playlists");
+        if (playlists){
+          return playlists;
+        }else{
+          return [];
+        }
+      }
+
+      function remove(item) {
+        var playlists = localStorageService.get("playlists");
+        if (playlists){
+          angular.forEach(playlists, function(value, key) {
+            if (value.playlistId === item.playlistId){
+              playlists.splice(key, 1);
+            }
+          });
+          localStorageService.set("playlists", playlists);
+        }
+      }
+
+      function guid() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
       }
 
       return factory;

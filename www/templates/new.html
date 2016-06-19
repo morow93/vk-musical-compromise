@@ -2,7 +2,7 @@
   <ion-content>
     <!--Friends-->
     <section ng-if="loaded && friends">
-      <div id='new-playlist-card' class="card">
+      <div id='new-playlist-card' class="card" on-drag="closeCard()">
           <div class="item item-body custom-item-body">
             <p style="">Select people, whose music you want to listen.</p>
             <button class="button button-light" ng-click="closeCard()" style="">

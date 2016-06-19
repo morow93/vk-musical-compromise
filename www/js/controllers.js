@@ -4,17 +4,18 @@
 
     angular.module("starter.controllers", []);
 
-    newCtrl.$inject = ["$scope", "FriendService", "AuthService", "ToastrService"];
-    dashCtrl.$inject = [];
+    newCtrl.$inject = ["$scope", "$ionicPopup", "FriendService", "AuthService", "ToastrService", "PlaylistService", "$state", "$timeout"];
+    dashCtrl.$inject = ["$scope", "PlaylistService"];
 
     angular.module("starter.controllers").controller("NewCtrl", newCtrl);
     angular.module("starter.controllers").controller("DashCtrl", dashCtrl);
 
-    function newCtrl($scope, friendService, authService, toastrService) {
+    function newCtrl($scope, $ionicPopup, friendService, authService, toastrService, playlistService, $state, $timeout) {
 
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
-
+      $scope.create = create;
+      
       $scope.$on("$ionicView.enter", function(e) {
 
         $scope.loaded = false;
@@ -78,9 +79,56 @@
 
       }
 
+      function create() {
+
+        var selectedFriends = [];
+        angular.forEach($scope.friends, function(value, key) {
+          if (value.isChecked){
+            selectedFriends.push(value);
+          }
+        });
+
+        $scope.data = {};
+
+        var confirmPopup = $ionicPopup.show({
+          title: 'New Playlist',
+          template: '<input type="text" ng-model="data.playlistName" placeholder="Choose playlist name">',
+          scope: $scope,
+          buttons: [
+            { text: 'Cancel' },
+            {
+              text: '<b>Create</b>',
+              type: 'button-positive',
+              onTap: function(e) {
+                if (!$scope.data.playlistName) {
+                  //don't allow the user to close unless he enters name
+                  e.preventDefault();
+                } else {
+                  return $scope.data.playlistName;
+                }
+              }
+            }
+          ]
+        });
+
+        confirmPopup.then(function(res) {
+          playlistService.create({
+            title: res,
+            friends: selectedFriends
+          });
+          $state.go("tab.dash");
+        });
+
+      }
+
     }
 
-    function dashCtrl() {
+    function dashCtrl($scope, playlistService) {
+
+      $scope.$on("$ionicView.enter", function(e) {
+        var playlists = playlistService.get();
+        alert(JSON.stringify(playlists));
+      });
 
     }
 
