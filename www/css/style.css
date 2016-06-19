@@ -8,4 +8,14 @@
 }
 .custom-spinner{
   text-align: center;
+  padding-top: 10px;
+}
+.custom-item-body{
+  position:relative;
+}
+.custom-item-body p{
+  margin-right: 45px;
+}
+.custom-item-body button{
+  position:absolute; top: 5px; right: 5px; z-index:3000;
 }

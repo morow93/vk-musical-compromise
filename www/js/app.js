@@ -49,12 +49,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       }
     }
   })
-  .state('tab.friends', {
-      url: '/friends',
+  .state('tab.new', {
+      url: '/new',
       views: {
-        'tab-friends': {
-          templateUrl: 'templates/friends.html',
-          controller: 'FriendsCtrl'
+        'tab-new': {
+          templateUrl: 'templates/new.html',
+          controller: 'NewCtrl'
         }
       }
     });

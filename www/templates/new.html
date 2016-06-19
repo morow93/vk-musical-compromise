@@ -1,13 +1,23 @@
-<ion-view view-title="Friends">
+<ion-view view-title="Create new playlist">
 
   <ion-content>
 
     <!--Friends-->
     <section ng-if="loaded && friends">
+
+      <div id='new-playlist-card' class="card">
+          <div class="item item-body custom-item-body">
+            <p style="">Select people, whose music you want to listen.</p>
+            <button class="button button-light" ng-click="closeCard()" style="">
+              <i class="ion-close-round"> </i>
+            </button>
+          </div>
+      </div>
+
       <label class="item item-input">
         <input type="text" placeholder="Search" ng-model="searchTerm.$">
       </label>
-      
+
       <ion-list ng-repeat="friend in friends | filter:searchTerm:strict" type="item-text-wrap">
         <!--class="item-remove-animate item-avatar item-icon-right"-->
           <ion-checkbox>
@@ -31,7 +41,7 @@
     </section>
 
     <!--Loading-->
-    <section ng-if="!loaded">
+    <section ng-if="!loaded" class="custom-spinner">
       <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>
 
