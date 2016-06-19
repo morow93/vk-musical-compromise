@@ -1,10 +1,10 @@
 <ion-view view-title="Create new playlist">
   <ion-content>
-    <!--Friends-->
+    <!-- Friends -->
     <section ng-if="loaded && friends">
       <div id='new-playlist-card' class="card" on-drag="closeCard()">
           <div class="item item-body custom-item-body">
-            <p style="">Select people, whose music you want to listen.</p>
+            <p style="">Select your friends, whose music you want to listen.</p>
             <button class="button button-light" ng-click="closeCard()" style="">
               <i class="ion-close-round"> </i>
             </button>
@@ -23,14 +23,14 @@
       </ion-list>
     </section>
 
-    <!--No friends-->
+    <!-- No friends -->
     <section ng-if="loaded && !friends">
       <h4 class="padding">
         No friends found
       </h2>
     </section>
 
-    <!--Loading-->
+    <!-- Loading -->
     <section ng-if="!loaded" class="custom-spinner">
       <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>

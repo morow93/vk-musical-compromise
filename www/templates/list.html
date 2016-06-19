@@ -1,0 +1,21 @@
+<ion-view view-title="Playlists">
+  <ion-content>
+
+    <!-- Playlists -->
+    <section ng-if="loaded && playlists.length > 0">
+      <ion-list>
+        <ion-item ng-repeat="playlist in playlists">
+          {{playlist.title}}
+        </ion-item>
+      </ion-list>
+    </section>
+
+    <!-- No playlists -->
+    <section ng-if="loaded && (!playlists || playlists.length == 0)">
+      <h4 class="padding">
+        No playlists found
+      </h2>
+    </section>
+
+  </ion-content>
+</ion-view>

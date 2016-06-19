@@ -5,20 +5,22 @@
     angular.module("starter.controllers", []);
 
     newCtrl.$inject = ["$scope", "$ionicPopup", "FriendService", "AuthService", "ToastrService", "PlaylistService", "$state", "$timeout"];
-    dashCtrl.$inject = ["$scope", "PlaylistService"];
+    listCtrl.$inject = ["$scope", "PlaylistService"];
 
     angular.module("starter.controllers").controller("NewCtrl", newCtrl);
-    angular.module("starter.controllers").controller("DashCtrl", dashCtrl);
+    angular.module("starter.controllers").controller("ListCtrl", listCtrl);
 
     function newCtrl($scope, $ionicPopup, friendService, authService, toastrService, playlistService, $state, $timeout) {
 
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
       $scope.create = create;
-      
+
       $scope.$on("$ionicView.enter", function(e) {
 
         $scope.loaded = false;
+        $scope.selectedFriendsCounter = 0;
+        $scope.selectedFriendsTitle = "";
 
         var counter = 0;
 
@@ -116,18 +118,19 @@
             title: res,
             friends: selectedFriends
           });
-          $state.go("tab.dash");
+          $state.go("tab.list");
         });
 
       }
 
     }
 
-    function dashCtrl($scope, playlistService) {
+    function listCtrl($scope, playlistService) {
 
       $scope.$on("$ionicView.enter", function(e) {
-        var playlists = playlistService.get();
-        alert(JSON.stringify(playlists));
+        $scope.loaded = false;
+        $scope.playlists = playlistService.get();
+        $scope.loaded = true;
       });
 
     }

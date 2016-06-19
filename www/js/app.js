@@ -41,12 +41,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     abstract: true,
     templateUrl: 'templates/tabs.html'
   })
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.list', {
+    url: '/list',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'tab-list': {
+        templateUrl: 'templates/list.html',
+        controller: 'ListCtrl'
       }
     }
   })
@@ -60,6 +60,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
       }
     });
 
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/list');
 
 });
