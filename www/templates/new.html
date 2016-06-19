@@ -1,10 +1,7 @@
 <ion-view view-title="Create new playlist">
-
   <ion-content>
-
     <!--Friends-->
     <section ng-if="loaded && friends">
-
       <div id='new-playlist-card' class="card">
           <div class="item item-body custom-item-body">
             <p style="">Select people, whose music you want to listen.</p>
@@ -13,23 +10,16 @@
             </button>
           </div>
       </div>
-
       <label class="item item-input">
-        <input type="text" placeholder="Search" ng-model="searchTerm.$">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input id="search-input" type="search" placeholder="Search" ng-model="searchTerm.$">
       </label>
-
       <ion-list ng-repeat="friend in friends | filter:searchTerm:strict" type="item-text-wrap">
-        <!--class="item-remove-animate item-avatar item-icon-right"-->
-          <ion-checkbox>
+          <ion-checkbox ng-model="friend.isChecked" ng-change="checkFriend(friend)">
             <span ng-bind="friend['first_name']"></span>
             <span ng-bind="friend['last_name']"></span>
           <img class="item-checkbox-img" src="{{friend['photo_100']}}">
           </ion-checkbox>
-          <!-- <img ng-src="{{friend['photo_100']}}">
-          <h2>
-            <span ng-bind="friend['first_name']"></span>
-            <span ng-bind="friend['last_name']"></span>
-          </h2> -->
       </ion-list>
     </section>
 
@@ -46,5 +36,13 @@
     </section>
 
   </ion-content>
+
+  <ion-footer-bar ng-if="selectedFriendsCounter > 0" align-title="left" class="bar bar-positive">
+    <h4 class="title" ng-bind="selectedFriendsTitle">
+    </h4>
+    <div class="buttons" ng-click="create()">
+      <button class="button">Go!</button>
+    </div>
+  </ion-footer-bar>
 
 </ion-view>

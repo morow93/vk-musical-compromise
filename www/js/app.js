@@ -14,7 +14,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-
     }
 
     if (window.StatusBar) {
@@ -32,7 +31,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 
 }])
 
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider) {
+
+  $ionicConfigProvider.form.checkbox("circle");
 
   $stateProvider
     .state('tab', {
