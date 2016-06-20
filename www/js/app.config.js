@@ -33,7 +33,15 @@
             controller: 'NewController'
           }
         }
-      });
+    })
+    .state('tab.details', {
+      url: '/list/:playlistId',
+      views: {
+        'tab-list': {
+          templateUrl: 'js/pages/details/details.html'
+        }
+      }
+    });
 
     $urlRouterProvider.otherwise('/tab/list');
   }
