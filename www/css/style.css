@@ -19,3 +19,6 @@
 .custom-item-body button{
   position:absolute; top: 5px; right: 5px; z-index:3000;
 }
+.cuustom-icon-size{
+  font-size: 30px;
+}

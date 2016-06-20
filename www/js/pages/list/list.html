@@ -3,9 +3,10 @@
 
     <!-- Playlists -->
     <section ng-if="loaded && playlists.length > 0">
-      <ion-list>
-        <ion-item ng-repeat="playlist in playlists">
-          {{playlist.title}}
+      <ion-list can-swipe="true">
+        <ion-item ng-repeat="playlist in playlists | orderBy:'-createdAt'">
+          <h2>{{playlist.title}}</h2>
+          <ion-option-button class="button-assertive ion-ios-trash-outline cuustom-icon-size" ng-click="remove(playlist)"></ion-option-button>
         </ion-item>
       </ion-list>
     </section>

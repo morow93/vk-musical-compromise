@@ -2,15 +2,11 @@
 
     "use strict";
 
-    angular.module("starter.controllers", []);
+    angular.module("pages.new").controller("NewController", newController);
 
-    newCtrl.$inject = ["$scope", "$ionicPopup", "FriendService", "AuthService", "ToastrService", "PlaylistService", "$state", "$timeout"];
-    listCtrl.$inject = ["$scope", "PlaylistService"];
+    newController.$inject = ["$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout"];
 
-    angular.module("starter.controllers").controller("NewCtrl", newCtrl);
-    angular.module("starter.controllers").controller("ListCtrl", listCtrl);
-
-    function newCtrl($scope, $ionicPopup, friendService, authService, toastrService, playlistService, $state, $timeout) {
+    function newController($scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout) {
 
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
@@ -31,7 +27,7 @@
 
           ++counter;
           if (counter > 5) {
-            toastrService.show("ERROR GET FRIENDS FOR NEW PLAYLIST");
+            toastService.show("ERROR GET FRIENDS FOR NEW PLAYLIST");
             return;
           }
 
@@ -70,6 +66,7 @@
             counter++;
           }
         });
+
         $scope.selectedFriendsCounter = counter;
 
         if ($scope.selectedFriendsCounter > 0){
@@ -126,23 +123,14 @@
           if (res){
             playlistService.create({
               title: res,
-              friends: selectedFriends
+              friends: selectedFriends,
+              createdAt: new Date()
             });
             $state.go("tab.list");
           }
         });
 
       }
-
-    }
-
-    function listCtrl($scope, playlistService) {
-
-      $scope.$on("$ionicView.enter", function(e) {
-        $scope.loaded = false;
-        $scope.playlists = playlistService.get();
-        $scope.loaded = true;
-      });
 
     }
 
