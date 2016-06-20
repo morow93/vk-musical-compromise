@@ -37,11 +37,16 @@
 
   </ion-content>
 
-  <ion-footer-bar ng-if="selectedFriendsCounter > 0" align-title="left" class="bar bar-positive">
-    <h4 class="title" ng-bind="selectedFriendsTitle">
+  <ion-footer-bar ng-if="selectedFriendsCounter > 0" align-title="center" class="bar bar-positive">
+    <div class="buttons">
+      <button class="button button-icon icon ion-close" ng-click="uncheck()">
+      </button>
+    </div>
+    <h4 class="title bar-title" ng-bind="selectedFriendsTitle">
     </h4>
-    <div class="buttons" ng-click="create()">
-      <button class="button">Go!</button>
+    <div class="buttons">
+      <button class="button button-icon icon ion-checkmark" ng-click="create()">
+      </button>
     </div>
   </ion-footer-bar>
 

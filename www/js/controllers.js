@@ -15,6 +15,7 @@
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
       $scope.create = create;
+      $scope.uncheck = uncheck;
 
       $scope.$on("$ionicView.enter", function(e) {
 
@@ -73,12 +74,20 @@
 
         if ($scope.selectedFriendsCounter > 0){
           if ($scope.selectedFriendsCounter === 1){
-            $scope.selectedFriendsTitle = "You checked 1 friend";
+            $scope.selectedFriendsTitle = "1 friend";
           }else{
-            $scope.selectedFriendsTitle = "You checked " + $scope.selectedFriendsCounter + " friends";
+            $scope.selectedFriendsTitle = $scope.selectedFriendsCounter + " friends";
           }
         }
 
+      }
+
+      function uncheck() {
+        angular.forEach($scope.friends, function(value, key) {
+          value.isChecked = false;
+        });
+        $scope.selectedFriendsCounter = 0;
+        $scope.selectedFriendsTitle = "";
       }
 
       function create() {
@@ -114,11 +123,13 @@
         });
 
         confirmPopup.then(function(res) {
-          playlistService.create({
-            title: res,
-            friends: selectedFriends
-          });
-          $state.go("tab.list");
+          if (res){
+            playlistService.create({
+              title: res,
+              friends: selectedFriends
+            });
+            $state.go("tab.list");
+          }
         });
 
       }
