@@ -17,7 +17,7 @@
         var deferred = $q.defer();
         var authInfo = localStorageService.get("authInfo");
         if (!authInfo || (authInfo && authInfo["expires_at"] < new Date())){
-          $cordovaOauth.vkontakte("5509706", ["email", "user_id", "access_token"]).then(function(res) {
+          $cordovaOauth.vkontakte("5509706", ["audio"]).then(function(res) {            
             res["expires_at"] = moment().add(res["expires_in"] - 10, 'seconds').toDate();
             localStorageService.set("authInfo", res);
             deferred.resolve(res);

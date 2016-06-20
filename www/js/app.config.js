@@ -38,7 +38,8 @@
       url: '/list/:playlistId',
       views: {
         'tab-list': {
-          templateUrl: 'js/pages/details/details.html'
+          templateUrl: 'js/pages/details/details.html',
+          controller: 'DetailsController'
         }
       }
     });

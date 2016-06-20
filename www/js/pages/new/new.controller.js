@@ -27,7 +27,7 @@
 
           ++counter;
           if (counter > 5) {
-            console.log("Error get friends for new playlist");
+            toastService.show("Can not load friends");
             return;
           }
 

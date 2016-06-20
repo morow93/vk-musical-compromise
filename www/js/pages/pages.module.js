@@ -4,8 +4,8 @@
 
   angular.module("app.pages", [
     "pages.new",
-    "pages.list"
-    //"pages.details"
+    "pages.list",
+    "pages.details"
   ]);
 
 })();

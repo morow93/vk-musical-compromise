@@ -27,12 +27,22 @@
       }
     }
 
-    function get() {
+    function get(playlistId) {
       var playlists = localStorageService.get("playlists");
-      if (playlists){
-        return playlists;
+      if (!angular.isDefined(playlistId)){
+        if (playlists){
+          return playlists;
+        }else{
+          return [];
+        }
       }else{
-        return [];
+        var playlist = null;
+        angular.forEach(playlists, function(value, key) {
+          if (value.playlistId === playlistId){
+            playlist = value;
+          }
+        });
+        return playlist;
       }
     }
 

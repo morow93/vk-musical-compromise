@@ -1,13 +1,24 @@
+<ion-view view-title="{{playlist.title}}">
+  <ion-content>
 
-<ion-view view-title="{{chat.name}}">
-  <ion-content class="padding">
-    <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
-    <p>
-      {{chat.lastText}}
-    </p>
-    <br>
-    <br>
-    <br>
-    azaza1<br>
+    <!-- Audios -->
+    <section ng-if="loaded && audios">
+      <ion-list ng-repeat="audio in audios" type="item-text-wrap">
+          {{audio.title}}<!-- url -->
+      </ion-list>
+    </section>
+
+    <!-- No audios -->
+    <section ng-if="loaded && !audios">
+      <h4 class="padding">
+        No audios found
+      </h2>
+    </section>
+
+    <!-- Loading -->
+    <section ng-if="!loaded" class="custom-spinner">
+      <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
+    </section>
+
   </ion-content>
 </ion-view>
