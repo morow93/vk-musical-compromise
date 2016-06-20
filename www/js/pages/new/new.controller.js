@@ -27,7 +27,7 @@
 
           ++counter;
           if (counter > 5) {
-            toastService.show("ERROR GET FRIENDS FOR NEW PLAYLIST");
+            console.log("Error get friends for new playlist");
             return;
           }
 

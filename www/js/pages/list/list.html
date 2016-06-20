@@ -4,10 +4,20 @@
     <!-- Playlists -->
     <section ng-if="loaded && playlists.length > 0">
       <ion-list can-swipe="true">
-        <ion-item ng-repeat="playlist in playlists | orderBy:'-createdAt'">
-          <h2>{{playlist.title}}</h2>
-          <ion-option-button class="button-assertive ion-ios-trash-outline cuustom-icon-size" ng-click="remove(playlist)"></ion-option-button>
-        </ion-item>
+        <div ng-repeat="playlist in playlists | orderBy:'-createdAt'">
+          <ion-item class="item-stable" ng-click="togglePlaylist(playlist)" ng-class="{active: isPlaylistShown(playlist)}">
+              <i class="icon" ng-class="isPlaylistShown(playlist) ? 'ion-minus' : 'ion-plus'"></i>
+              &nbsp;
+              <span ng-bind="playlist.title"></span>
+            <ion-option-button class="button-assertive ion-ios-trash-outline cuustom-icon-size" ng-click="remove(playlist)"></ion-option-button>
+          </ion-item>
+          <ion-item class="item-accordion" ng-show="isPlaylistShown(playlist)">
+            <span ng-repeat="friend in playlist.friends">
+              {{friend | json}}
+              <span ng-if="$index !== (playlist.friends.length - 1)">, </span>
+            </span>
+          </ion-item>
+        </div>
       </ion-list>
     </section>
 
