@@ -4,9 +4,9 @@
 
     angular.module("pages.new").controller("NewController", newController);
 
-    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout"];
+    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout", "$q"];
 
-    function newController($rootScope, $scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout) {
+    function newController($rootScope, $scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout, $q) {
 
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
@@ -40,17 +40,28 @@
           }
 
           authService.run().then(function(){
-            return friendService.get();
+            return $q.all([authService.getMe(), friendService.get()]);
           }).then(function(res) {
-            if (res.error && res.error["error_code"] === 5){
-              // access_token was given to another ip address)
-              authService.clear();
-              getFriends();
-            }else{
-              $scope.friends = res.response;
+            var result = [];
+            var keepGoing = true;
+            angular.forEach(res, function(value, key){
+              if (keepGoing){
+                if (!angular.isDefined(value.error) && angular.isArray(value.response)){
+                  result = result.concat(value.response);
+                }else if (value.error && value.error["error_code"] === 5){
+                  // access_token was given to another ip address
+                  keepGoing = false;
+                }
+              }
+            });
+            if (keepGoing){
+              $scope.friends = result;
               $scope.loaded = true;
               // Stop the ion-refresher from spinning
               $scope.$broadcast('scroll.refreshComplete');
+            }else{
+              authService.clear();
+              getFriends();
             }
           }).catch(function(err){
             getFriends();
@@ -60,7 +71,6 @@
       }
 
       function closeCard(){
-
         // Show for the first time
         $rootScope.showNewPlaylistCard = false;
 
@@ -69,7 +79,6 @@
       }
 
       function checkFriend() {
-
         // Close keyboard
         document.activeElement.blur();
 
