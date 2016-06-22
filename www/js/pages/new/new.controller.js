@@ -35,7 +35,8 @@
           authService.run().then(function(){
             return friendService.get();
           }).then(function(res) {
-            if (res.error) {
+            if (res.error && res.error["error_code"] === 5){
+              // access_token was given to another ip address) 
               authService.clear();
               getFriends();
             }else{
@@ -43,7 +44,6 @@
               $scope.loaded = true;
             }
           }).catch(function(err){
-            authService.clear();
             getFriends();
           });
         }

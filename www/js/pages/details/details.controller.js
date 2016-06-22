@@ -22,31 +22,48 @@
           return;
         }
 
-        var promises = [];
-        angular.forEach($scope.playlist.friends, function (value, key) {
-          promises.push(audioService.get(value.uid));
-        });
+        var counter = 0;
 
         getAudio();
 
         function getAudio(){
 
+          ++counter;
+          if (counter > 5) {
+            toastService.show("Can not load playlist");
+            $scope.loaded = true;
+            return;
+          }
+
           authService.run().then(function(){
+            var promises = [];
+            angular.forEach($scope.playlist.friends, function (value, key) {
+              promises.push(audioService.get(value.uid));
+            });
             return $q.all(promises);
           }).then(function(res) {
+            alert(JSON.stringify(res));
             var result = [];
+            var keepGoing = true;
             angular.forEach(res, function(value, key){
-              if (!angular.isDefined(value.error) && angular.isArray(value.response)){
-                result = result.concat(value.response);
-              }else{
-                alert("THEN " + JSON.stringify(value));
+              if (keepGoing){
+                if (!angular.isDefined(value.error) && angular.isArray(value.response)){
+                  result = result.concat(value.response);
+                }else if (value.error && value.error["error_code"] === 5){
+                  // access_token was given to another ip address
+                  keepGoing = false;
+                }
               }
             });
-            $scope.audios = result;
+            if (keepGoing){
+              $scope.audios = result;
+              $scope.loaded = true;
+            }else{
+              authService.clear();
+              getAudio();
+            }
           }).catch(function(err){
-            alert("CATCH " + JSON.stringify(err));
-          }).finally(function () {
-            $scope.loaded = true;
+            getAudio();
           });
         }
 
