@@ -12,8 +12,13 @@
       $scope.checkFriend = checkFriend;
       $scope.create = create;
       $scope.uncheck = uncheck;
+      $scope.activate = activate;
 
       $scope.$on("$ionicView.enter", function(e) {
+        activate();
+      });
+
+      function activate() {
 
         $scope.loaded = false;
         $scope.selectedFriendsCounter = 0;
@@ -29,6 +34,8 @@
           if (counter > 5) {
             toastService.show("Can not load friends");
             $scope.loaded = true;
+            // Stop the ion-refresher from spinning
+            $scope.$broadcast('scroll.refreshComplete');
             return;
           }
 
@@ -36,19 +43,21 @@
             return friendService.get();
           }).then(function(res) {
             if (res.error && res.error["error_code"] === 5){
-              // access_token was given to another ip address) 
+              // access_token was given to another ip address)
               authService.clear();
               getFriends();
             }else{
               $scope.friends = res.response;
               $scope.loaded = true;
+              // Stop the ion-refresher from spinning
+              $scope.$broadcast('scroll.refreshComplete');
             }
           }).catch(function(err){
             getFriends();
           });
         }
 
-      });
+      }
 
       function closeCard(){
 

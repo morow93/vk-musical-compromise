@@ -1,10 +1,11 @@
 <ion-view view-title="Playlists">
   <ion-content>
-
+    <ion-refresher on-refresh="activate()" spinner="android">
+    </ion-refresher>
     <!-- Playlists -->
     <section ng-if="loaded && playlists.length > 0">
       <ion-list>
-        <div ng-repeat="playlist in playlists | orderBy:'-createdAt'">
+        <div collection-repeat="playlist in playlists | orderBy:'-createdAt'" item-render-buffer="5">
           <ion-item class="item-remove-animate item-icon-right" type="item-text-wrap" href="#/tab/list/{{playlist.playlistId}}">
             <h2 ng-bind="playlist.title"></h2>
             <i class="icon ion-chevron-right icon-accessory"></i>

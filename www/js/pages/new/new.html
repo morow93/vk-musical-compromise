@@ -1,5 +1,7 @@
 <ion-view view-title="Create new playlist" cache-view="false">
   <ion-content>
+    <ion-refresher on-refresh="activate()" spinner="none">
+    </ion-refresher>
     <!-- Friends -->
     <section ng-if="loaded && friends">
       <div id='new-playlist-card' class="card" on-drag="closeCard()" ng-if="$root.showNewPlaylistCard">
@@ -14,12 +16,14 @@
         <i class="icon ion-search placeholder-icon"></i>
         <input id="search-input" type="search" placeholder="Search" ng-model="searchTerm.$">
       </label>
-      <ion-list ng-repeat="friend in friends | filter:searchTerm:strict" type="item-text-wrap">
+      <ion-list type="item-text-wrap">
+        <div collection-repeat="friend in friends | filter:searchTerm:strict" item-render-buffer="5">
           <ion-checkbox ng-model="friend.isChecked" ng-change="checkFriend(friend)">
             <span ng-bind="friend['first_name']"></span>
             <span ng-bind="friend['last_name']"></span>
           <img class="item-checkbox-img" src="{{friend['photo_100']}}">
           </ion-checkbox>
+        </div>
       </ion-list>
     </section>
 

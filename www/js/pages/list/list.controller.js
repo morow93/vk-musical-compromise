@@ -9,15 +9,22 @@
     function listController($scope, playlistService) {
 
       $scope.remove = remove;
+      $scope.activate = activate;
 
       $scope.$on("$ionicView.enter", function(e) {
-        $scope.loaded = false;
-        $scope.playlists = playlistService.get();
-        $scope.loaded = true;
+        activate();
       });
 
       function remove(item) {
         $scope.playlists = playlistService.remove(item);
+      }
+
+      function activate() {
+        $scope.loaded = false;
+        $scope.playlists = playlistService.get();
+        $scope.loaded = true;
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
       }
 
     }

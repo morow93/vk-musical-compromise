@@ -1,10 +1,13 @@
 <ion-view view-title="{{playlist.title}}" cache-view="false">
   <ion-content>
-
+    <ion-refresher on-refresh="activate()" spinner="none">
+    </ion-refresher>
     <!-- Audios -->
     <section ng-if="loaded && audios">
-      <ion-list ng-repeat="audio in audios" type="item-text-wrap">
-          {{audio | json}}<br><br>
+      <ion-list type="item-text-wrap">
+        <div collection-repeat="audio in audios" item-render-buffer="5">
+          {{audio.artit}} - {{audio.title}}<br><br>
+        </div>
       </ion-list>
     </section>
 

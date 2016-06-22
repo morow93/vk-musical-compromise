@@ -8,10 +8,17 @@
 
     function detailsController($q, $scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout, $stateParams, audioService) {
 
-      $scope.$on("$ionicView.enter", function(e) {
+      $scope.activate = activate;
 
+      $scope.$on("$ionicView.enter", function(e) {
+        activate();
+      });
+
+      function activate(){
         if (!angular.isDefined($stateParams.playlistId)) {
           toastService.show("Can not load playlist");
+          // Stop the ion-refresher from spinning
+          $scope.$broadcast('scroll.refreshComplete');
           return;
         };
 
@@ -19,6 +26,8 @@
         $scope.playlist = playlistService.get($stateParams.playlistId);
         if (!$scope.playlist || !$scope.playlist.friends) {
           toastService.show("Can not load playlist");
+          // Stop the ion-refresher from spinning
+          $scope.$broadcast('scroll.refreshComplete');
           return;
         }
 
@@ -32,6 +41,8 @@
           if (counter > 5) {
             toastService.show("Can not load playlist");
             $scope.loaded = true;
+            // Stop the ion-refresher from spinning
+            $scope.$broadcast('scroll.refreshComplete');
             return;
           }
 
@@ -41,7 +52,7 @@
               promises.push(audioService.get(value.uid));
             });
             return $q.all(promises);
-          }).then(function(res) {            
+          }).then(function(res) {
             var result = [];
             var keepGoing = true;
             angular.forEach(res, function(value, key){
@@ -57,6 +68,8 @@
             if (keepGoing){
               $scope.audios = result;
               $scope.loaded = true;
+              // Stop the ion-refresher from spinning
+              $scope.$broadcast('scroll.refreshComplete');
             }else{
               authService.clear();
               getAudio();
@@ -65,8 +78,7 @@
             getAudio();
           });
         }
-
-      });
+      }
 
     }
 
