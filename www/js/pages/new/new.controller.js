@@ -4,9 +4,9 @@
 
     angular.module("pages.new").controller("NewController", newController);
 
-    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout", "$q"];
+    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout", "$q", "BaseHttpService"];
 
-    function newController($rootScope, $scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout, $q) {
+    function newController($rootScope, $scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout, $q, baseHttpService) {
 
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
@@ -24,49 +24,20 @@
         $scope.selectedFriendsCounter = 0;
         $scope.selectedFriendsTitle = "";
 
-        var counter = 0;
-
-        getFriends();
-
-        function getFriends(){
-
-          ++counter;
-          if (counter > 5) {
-            toastService.show("Can not load friends");
-            $scope.loaded = true;
-            // Stop the ion-refresher from spinning
-            $scope.$broadcast('scroll.refreshComplete');
-            return;
-          }
-
-          authService.run().then(function(){
-            return $q.all([authService.getMe(), friendService.get()]);
-          }).then(function(res) {
-            var result = [];
-            var keepGoing = true;
-            angular.forEach(res, function(value, key){
-              if (keepGoing){
-                if (!angular.isDefined(value.error) && angular.isArray(value.response)){
-                  result = result.concat(value.response);
-                }else if (value.error && value.error["error_code"] === 5){
-                  // access_token was given to another ip address
-                  keepGoing = false;
-                }
-              }
-            });
-            if (keepGoing){
-              $scope.friends = result;
-              $scope.loaded = true;
-              // Stop the ion-refresher from spinning
-              $scope.$broadcast('scroll.refreshComplete');
-            }else{
-              authService.clear();
-              getFriends();
-            }
-          }).catch(function(err){
-            getFriends();
-          });
-        }
+        baseHttpService.run(function() {
+          return [
+            authService.getMe(),
+            friendService.get()
+          ];
+        }).then(function(res) {
+          $scope.friends = res;
+        }).catch(function(err) {
+          toastService.show("Can not load friends");
+        }).finally(function() {
+          $scope.loaded = true;
+          // Stop the ion-refresher from spinning
+          $scope.$broadcast('scroll.refreshComplete');
+        });
 
       }
 
