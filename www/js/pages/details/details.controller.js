@@ -41,8 +41,7 @@
               promises.push(audioService.get(value.uid));
             });
             return $q.all(promises);
-          }).then(function(res) {
-            alert(JSON.stringify(res));
+          }).then(function(res) {            
             var result = [];
             var keepGoing = true;
             angular.forEach(res, function(value, key){

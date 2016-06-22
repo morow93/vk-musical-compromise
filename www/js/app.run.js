@@ -21,9 +21,7 @@
         StatusBar.styleDefault();
       }
 
-      authService.run().then(function(res){
-        toastService.show("You are successfully logged in!");
-      });
+      authService.run();
 
     });
   }

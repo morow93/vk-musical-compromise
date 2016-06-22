@@ -4,7 +4,7 @@
     <!-- Audios -->
     <section ng-if="loaded && audios">
       <ion-list ng-repeat="audio in audios" type="item-text-wrap">
-          {{audio.title}}<!-- url -->
+          {{audio | json}}<br><br>
       </ion-list>
     </section>
 

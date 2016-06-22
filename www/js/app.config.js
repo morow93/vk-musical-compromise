@@ -14,7 +14,7 @@
       .state('tab', {
       url: '/tab',
       abstract: true,
-      templateUrl: 'js/pages/tabs/tabs.html'
+      templateUrl: 'js/pages/pages.html'
     })
     .state('tab.list', {
       url: '/list',
