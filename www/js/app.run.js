@@ -4,11 +4,13 @@
 
   angular.module("app").run(run);
 
-  run.$inject = ["$ionicPlatform", "$cordovaOauth", "AuthService", "ToastService"];
+  run.$inject = ["$rootScope", "$ionicPlatform", "$cordovaOauth", "AuthService", "ToastService"];
 
-  function run($ionicPlatform, $cordovaOauth, authService, toastService) {
+  function run($rootScope, $ionicPlatform, $cordovaOauth, authService, toastService) {
 
     $ionicPlatform.ready(function() {
+
+      $rootScope.showNewPlaylistCard = true;
 
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);

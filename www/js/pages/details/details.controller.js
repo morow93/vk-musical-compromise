@@ -30,7 +30,7 @@
         getAudio();
 
         function getAudio(){
-          
+
           authService.run().then(function(){
             return $q.all(promises);
           }).then(function(res) {
@@ -38,11 +38,13 @@
             angular.forEach(res, function(value, key){
               if (!angular.isDefined(value.error) && angular.isArray(value.response)){
                 result = result.concat(value.response);
+              }else{
+                alert("THEN " + JSON.stringify(value));
               }
             });
             $scope.audios = result;
           }).catch(function(err){
-            alert("catch!");
+            alert("CATCH " + JSON.stringify(err));
           }).finally(function () {
             $scope.loaded = true;
           });

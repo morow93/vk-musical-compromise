@@ -4,9 +4,9 @@
 
     angular.module("pages.new").controller("NewController", newController);
 
-    newController.$inject = ["$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout"];
+    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "FriendService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout"];
 
-    function newController($scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout) {
+    function newController($rootScope, $scope, $ionicPopup, friendService, authService, toastService, playlistService, $state, $timeout) {
 
       $scope.closeCard = closeCard;
       $scope.checkFriend = checkFriend;
@@ -28,6 +28,7 @@
           ++counter;
           if (counter > 5) {
             toastService.show("Can not load friends");
+            $scope.loaded = true;
             return;
           }
 
@@ -39,18 +40,21 @@
               getFriends();
             }else{
               $scope.friends = res.response;
+              $scope.loaded = true;
             }
           }).catch(function(err){
             authService.clear();
             getFriends();
-          }).finally(function () {
-            $scope.loaded = true;
           });
         }
 
       });
 
       function closeCard(){
+
+        // Show for the first time
+        $rootScope.showNewPlaylistCard = false;
+
         var myEl = angular.element(document.querySelector("#new-playlist-card"));
         myEl.remove();
       }
@@ -109,7 +113,7 @@
               type: 'button-positive',
               onTap: function(e) {
                 if (!$scope.data.playlistName) {
-                  //don't allow the user to close unless he enters name
+                  // Don't allow the user to close unless he enters name
                   e.preventDefault();
                 } else {
                   return $scope.data.playlistName;
