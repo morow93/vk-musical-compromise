@@ -12,6 +12,10 @@
 
       $scope.activate = activate;
 
+      $scope.$on("$ionicView.enter", function(e) {
+        activate();
+      });
+
       function activate() {
 
         $scope.loaded = false;
@@ -40,7 +44,7 @@
 
         baseHttpService.run(function(){
           return functions;
-        }).then(function(res) {     
+        }).then(function(res) {
           $scope.audios = res;
         }).catch(function(err) {
           toastService.show("Can not load playlist");
