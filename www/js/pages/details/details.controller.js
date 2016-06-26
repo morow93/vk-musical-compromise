@@ -37,13 +37,10 @@
           return;
         }
 
-        var functions = [];
-        angular.forEach($scope.playlist.friends, function (value, key) {
-          functions.push(audioService.get(value.uid));
-        });
-
-        baseHttpService.run(function(){
-          return functions;
+        baseHttpService.run(function() {
+          return $scope.playlist.friends.map(function(item) {
+            return audioService.get(item.uid);
+          });
         }).then(function(res) {
           $scope.audios = res;
         }).catch(function(err) {
