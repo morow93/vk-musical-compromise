@@ -18,6 +18,9 @@
       var userInfo = localStorageService.get("authInfo");
       if (userInfo){
         $http.get('https://api.vk.com/method/audio.get?owner_id=' + uid + '&access_token=' + userInfo["access_token"]).then(function (res) {
+          if (res.data && angular.isArray(res.data.response)){
+            res.data.response.shift();
+          }
           deferred.resolve(res.data);
         }).catch(function(err){
           deferred.reject(err);

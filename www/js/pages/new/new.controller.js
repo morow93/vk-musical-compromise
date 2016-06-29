@@ -30,7 +30,11 @@
             friendService.get()
           ];
         }).then(function(res) {
-          $scope.friends = res;
+          var result = [];
+          angular.forEach(res, function(value, key) {
+            result = result.concat(value);
+          });
+          $scope.friends = result;
         }).catch(function(err) {
           toastService.show("Can not load friends");
         }).finally(function() {

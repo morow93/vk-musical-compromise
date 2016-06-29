@@ -33,7 +33,7 @@
         }
 
         var promises = functions();
-        
+
         authService.run().then(function(){
           return $q.all(promises);
         }).then(function(res) {
@@ -42,7 +42,7 @@
           angular.forEach(res, function(value, key){
             if (keepGoing){
               if (!angular.isDefined(value.error) && angular.isArray(value.response)){
-                result = result.concat(value.response);
+                result.push(value.response);
               }else if (value.error && value.error["error_code"] === 5){
                 // access_token was given to another ip address
                 keepGoing = false;

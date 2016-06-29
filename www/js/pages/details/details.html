@@ -2,19 +2,23 @@
   <ion-content>
     <ion-refresher on-refresh="activate()" spinner="none">
     </ion-refresher>
-    <!-- Audios -->
-    <section ng-if="loaded && audios">
-      <ion-list type="item-text-wrap">
-        <div collection-repeat="audio in audios" item-render-buffer="5">
-          {{audio.artist}} - {{audio.title}}<br><br>
-        </div>
-      </ion-list>
+    <!-- Tracks -->
+    <section ng-if="loaded && tracks">
+      <div class="list" collection-repeat="track in tracks" item-render-buffer="5">
+       <div class="item item-icon-left">
+          <i class="icon" ng-class="{'ion-ios-pause': track.playing, 'ion-ios-play': !track.playing}" ng-click="toggleTrack(track)"></i>
+          <span>
+            <span ng-bind="track.artist"></span> -
+            <span ng-bind="track.title"></span>
+          </span>
+       </div>
+     </div>
     </section>
 
-    <!-- No audios -->
-    <section ng-if="loaded && !audios">
+    <!-- No tracks -->
+    <section ng-if="loaded && !tracks">
       <h4 class="padding">
-        No audios found
+        No tracks found
       </h2>
     </section>
 
