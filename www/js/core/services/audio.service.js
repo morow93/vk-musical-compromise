@@ -44,6 +44,7 @@
           indexes.push(0);
         }
         // Mix
+        var k = 0;
         while (k < maxLength) {
           for (var i = 0; i < lists.length; i++) {
             var currentList = lists[i];
