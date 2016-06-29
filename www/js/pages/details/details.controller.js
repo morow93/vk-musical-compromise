@@ -17,7 +17,7 @@
         activate();
       });
 
-      // begin: move to service 
+      // begin: move to service
 
       function toggleTrack(track) {
 
@@ -74,12 +74,19 @@
 
       }
 
+      function resetAudio() {
+        $scope.currentTrack = {};
+        if ($scope.currentAudio){
+          $scope.currentAudio.pause();
+        }
+        $scope.currentAudio = null;
+      }
+
       // end: move to service
 
       function activate() {
 
-        $scope.currentAudio = null;
-        $scope.currentTrack = {};
+        resetAudio();
         $scope.loaded = false;
 
         if (!angular.isDefined($stateParams.playlistId)) {
