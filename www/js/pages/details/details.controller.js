@@ -17,23 +17,68 @@
         activate();
       });
 
+      // begin: move to service 
+
       function toggleTrack(track) {
+
         if ($scope.currentTrack.aid !== track.aid){
           $scope.currentTrack.playing = false;
         }
         track.playing = !track.playing;
+        var previousTrack = angular.copy($scope.currentTrack);
         $scope.currentTrack = track;
 
-        // TODO
-        // $scope.currentAudio = new Audio(track.url);
-        // $scope.currentAudio.play();
-        // $scope.currentAudio.pause();
+        if ($scope.currentTrack.aid === previousTrack.aid){
+          if(!$scope.currentAudio){
+            $scope.currentAudio = new Audio(track.url);
+            $scope.currentAudio.addEventListener("ended", continueToPlay);
+          }
+          if (track.playing){
+            $scope.currentAudio.play();
+          }else{
+            $scope.currentAudio.pause();
+          }
+        }else{
+          if ($scope.currentAudio){
+            $scope.currentAudio.pause();
+          }
+          if (track.playing){
+            $scope.currentAudio = new Audio(track.url);
+            $scope.currentAudio.addEventListener("ended", continueToPlay);
+            $scope.currentAudio.play();
+          }else{
+            $scope.currentAudio.pause();
+          }
+        }
 
       }
 
+      function continueToPlay() {
+
+        $scope.$apply(function(){
+          $scope.currentTrack.playing = false;
+          var nextTrackIndex = -1;
+          angular.forEach($scope.tracks, function(value, key) {
+              if ($scope.currentTrack.aid === value.aid){
+                nextTrackIndex = (key + 1);
+              }
+          });
+          if ($scope.tracks[nextTrackIndex]){
+            $scope.currentTrack = $scope.tracks[nextTrackIndex];
+            $scope.currentTrack.playing = true;
+            $scope.currentAudio = new Audio($scope.tracks[nextTrackIndex].url);
+            $scope.currentAudio.addEventListener("ended", continueToPlay);
+            $scope.currentAudio.play();
+          }
+        });
+
+      }
+
+      // end: move to service
+
       function activate() {
 
-        $scope.currentAudio = {};
+        $scope.currentAudio = null;
         $scope.currentTrack = {};
         $scope.loaded = false;
 
