@@ -9,7 +9,8 @@
   function audioService($q, $http, localStorageService) {
 
     var service = {
-      get: get
+      get: get,
+      mix: mix
     };
 
     function get(uid) {
@@ -25,6 +26,39 @@
         deferred.reject({ error: true });
       }
       return deferred.promise;
+    }
+
+    function mix(lists) {
+      var result = [];
+      if (angular.isArray(lists) && lists.length > 0){
+        // Get max length
+        var maxLength = 0;
+        for (var i = 0; i < lists.length; i++) {
+          if (lists[i].length > maxLength){
+            maxLength = lists[i].length;
+          }
+        }
+        // Get separate index for each list
+        var indexes = [];
+        for (var i = 0; i < lists.length; i++) {
+          indexes.push(0);
+        }
+        // Mix
+        while (k < maxLength) {
+          for (var i = 0; i < lists.length; i++) {
+            var currentList = lists[i];
+            if (!currentList[indexes[i]]){
+              indexes[i] = 0;
+            }
+            result.push(currentList[indexes[i]]);
+          }
+          for (var j = 0; j < indexes.length; j++) {
+            ++indexes[j];
+          }
+          ++k;
+        }
+      }
+      return result;
     }
 
     return service;
