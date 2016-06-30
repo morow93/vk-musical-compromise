@@ -14,7 +14,8 @@
       .state('tab', {
       url: '/tab',
       abstract: true,
-      templateUrl: 'js/pages/pages.html'
+      templateUrl: 'js/pages/pages.html',
+      controller: 'PagesController'
     })
     .state('tab.list', {
       url: '/list',
