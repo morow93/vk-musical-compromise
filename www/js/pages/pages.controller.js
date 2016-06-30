@@ -8,10 +8,12 @@
 
     function pagesController($scope, toastService) {
 
-      $scope.$on("$ionicView.enter", function(e) {
-        // TODO something
-      });
-    }
+      $scope.onPlaylistTabDeselected = onPlaylistTabDeselected;
 
+      function onPlaylistTabDeselected() {
+        $scope.$broadcast("playlistTabDeselected");
+      }
+
+    }
 
 })();

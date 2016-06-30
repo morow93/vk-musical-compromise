@@ -17,6 +17,14 @@
         activate();
       });
 
+      $scope.$on("$stateChangeStart", function(){
+        resetAudio();
+      });
+
+      $scope.$on("playlistTabDeselected", function() {
+        resetAudio();
+      });
+
       function toggleTrack(track, index) {
 
           if ($scope.currentTrack.index !== index){
