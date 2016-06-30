@@ -17,72 +17,71 @@
         activate();
       });
 
-      // begin: move to service
+      function toggleTrack(track, index) {
 
-      function toggleTrack(track) {
-
-        if ($scope.currentTrack.aid !== track.aid){
-          $scope.currentTrack.playing = false;
-        }
-        track.playing = !track.playing;
-        var previousTrack = angular.copy($scope.currentTrack);
-        $scope.currentTrack = track;
-
-        if ($scope.currentTrack.aid === previousTrack.aid){
-          if(!$scope.currentAudio){
-            $scope.currentAudio = new Audio(track.url);
-            $scope.currentAudio.addEventListener("ended", continueToPlay);
+          if ($scope.currentTrack.index !== index){
+            // Disable previous track
+            $scope.currentTrack.playing = false;
           }
-          if (track.playing){
-            $scope.currentAudio.play();
+          track.playing = !track.playing;
+          var previousTrack = angular.copy($scope.currentTrack);
+          $scope.currentTrack = track;
+          $scope.currentTrack.index = index;
+
+          if ($scope.currentTrack.index === previousTrack.index){
+            if(!$scope.currentAudio){
+              $scope.currentAudio = new Audio(track.url);
+              $scope.currentAudio.addEventListener("ended", continueToPlay);
+              $scope.currentAudio.addEventListener("error", continueToPlay);
+            }
+            if (track.playing){
+              $scope.currentAudio.play();
+            }else{
+              $scope.currentAudio.pause();
+            }
           }else{
-            $scope.currentAudio.pause();
+            if ($scope.currentAudio){
+              $scope.currentAudio.pause();
+            }
+            if (track.playing){
+              $scope.currentAudio = new Audio(track.url);
+              $scope.currentAudio.addEventListener("ended", continueToPlay);
+              $scope.currentAudio.addEventListener("error", continueToPlay);
+              $scope.currentAudio.play();
+            }else{
+              $scope.currentAudio.pause();
+            }
           }
-        }else{
-          if ($scope.currentAudio){
-            $scope.currentAudio.pause();
-          }
-          if (track.playing){
-            $scope.currentAudio = new Audio(track.url);
-            $scope.currentAudio.addEventListener("ended", continueToPlay);
-            $scope.currentAudio.play();
-          }else{
-            $scope.currentAudio.pause();
-          }
-        }
 
-      }
+          function continueToPlay() {
+              $scope.$apply(function(){
+                $scope.currentTrack.playing = false;
+                var nextTrackIndex = $scope.currentTrack.index + 1;
 
-      function continueToPlay() {
+                if ($scope.tracks[nextTrackIndex]){
+                  $scope.currentTrack = $scope.tracks[nextTrackIndex];
+                  $scope.currentTrack.playing = true;
+                  $scope.currentTrack.index = nextTrackIndex;
 
-        $scope.$apply(function(){
-          $scope.currentTrack.playing = false;
-          var nextTrackIndex = -1;
-          angular.forEach($scope.tracks, function(value, key) {
-              if ($scope.currentTrack.aid === value.aid){
-                nextTrackIndex = (key + 1);
-              }
-          });
-          if ($scope.tracks[nextTrackIndex]){
-            $scope.currentTrack = $scope.tracks[nextTrackIndex];
-            $scope.currentTrack.playing = true;
-            $scope.currentAudio = new Audio($scope.tracks[nextTrackIndex].url);
-            $scope.currentAudio.addEventListener("ended", continueToPlay);
-            $scope.currentAudio.play();
+                  $scope.currentAudio = new Audio($scope.tracks[nextTrackIndex].url);
+                  $scope.currentAudio.addEventListener("ended", continueToPlay);
+                  $scope.currentAudio.addEventListener("error", continueToPlay);
+                  $scope.currentAudio.play();
+                }
+              });
           }
-        });
 
       }
 
       function resetAudio() {
+        // "Pointer" to current playing track
         $scope.currentTrack = {};
         if ($scope.currentAudio){
           $scope.currentAudio.pause();
         }
+        // Will be audio object
         $scope.currentAudio = null;
       }
-
-      // end: move to service
 
       function activate() {
 

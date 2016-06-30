@@ -4,9 +4,9 @@
     </ion-refresher>
     <!-- Tracks -->
     <section ng-if="loaded && tracks">
-      <div class="list" collection-repeat="track in tracks" item-render-buffer="5">
+      <div class="list" collection-repeat="track in tracks track by $index" item-render-buffer="5">
        <div class="item item-icon-left">
-          <i class="icon" ng-class="{'ion-ios-pause': track.playing, 'ion-ios-play': !track.playing}" ng-click="toggleTrack(track)"></i>
+          <i class="icon" ng-class="{'ion-ios-pause': track.playing, 'ion-ios-play': !track.playing}" ng-click="toggleTrack(track, $index)"></i>
           <span>
             <span ng-bind="track.artist"></span> -
             <span ng-bind="track.title"></span>
