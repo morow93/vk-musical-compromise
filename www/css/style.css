@@ -35,3 +35,10 @@
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
 }
+.bar-stable.vk-theme {
+  background-color: rgb(80, 114, 153) !important;
+}
+.title {
+  color: #fff !important;
+  font-weight: bold;
+}

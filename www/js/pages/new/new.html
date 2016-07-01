@@ -21,7 +21,7 @@
           <ion-checkbox ng-model="friend.isChecked" ng-change="checkFriend(friend)">
             <span ng-bind="friend['first_name']"></span>
             <span ng-bind="friend['last_name']"></span>
-          <img class="item-checkbox-img" src="{{friend['photo_100']}}">
+          <img class="item-checkbox-img" ng-src="{{friend['photo_100']}}">
           </ion-checkbox>
         </div>
       </ion-list>

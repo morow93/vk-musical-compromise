@@ -1,0 +1,10 @@
+{
+  "name": "vk-musical-compromise",
+  "app_id": "",
+  "proxies": [
+      {
+        "path": "/vk",
+        "proxyUrl": "https://api.vk.com/method"
+      }
+    ]
+}

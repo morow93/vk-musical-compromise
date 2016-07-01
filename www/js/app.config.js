@@ -4,6 +4,14 @@
 
   angular.module("app").config(config);
 
+  /*
+  baseVk нужно для обхода CORS, настройки proxy в ionic.project
+  */
+  angular.module("app").constant("config", {
+    debug: true,
+    baseVk: 'http://localhost:8100/vk'
+  });
+
   config.$inject = ["$stateProvider", "$urlRouterProvider", "$ionicConfigProvider"];
 
   function config($stateProvider, $urlRouterProvider, $ionicConfigProvider) {

@@ -4,9 +4,9 @@
 
   angular.module("core.services").factory("AudioService", audioService);
 
-  audioService.$inject = ["$q", "$http", "localStorageService"];
+  audioService.$inject = ["$q", "$http", "localStorageService", "config"];
 
-  function audioService($q, $http, localStorageService) {
+  function audioService($q, $http, localStorageService, config) {
 
     var service = {
       get: get,
@@ -17,7 +17,7 @@
       var deferred = $q.defer();
       var userInfo = localStorageService.get("authInfo");
       if (userInfo){
-        $http.get('https://api.vk.com/method/audio.get?owner_id=' + uid + '&access_token=' + userInfo["access_token"]).then(function (res) {
+        $http.get(config.baseVk + '/audio.get?owner_id=' + uid + '&access_token=' + userInfo["access_token"]).then(function (res) {
           if (res.data && angular.isArray(res.data.response)){
             res.data.response.shift();
           }
