@@ -88,7 +88,8 @@
         resetAudio();
         $scope.loaded = false;
 
-        if (!angular.isDefined($stateParams.playlistId)) {          
+        if (!angular.isDefined($stateParams.playlistId)) {
+          $scope.tracks = null;
           $scope.loaded = true;
           toastService.show("Can not load playlist");
           // Stop the ion-refresher from spinning
@@ -98,6 +99,7 @@
 
         $scope.playlist = playlistService.get($stateParams.playlistId);
         if (!$scope.playlist || !$scope.playlist.friends) {
+          $scope.tracks = null;
           $scope.loaded = true;
           toastService.show("Can not load playlist");
           // Stop the ion-refresher from spinning
@@ -112,6 +114,7 @@
         }).then(function(res) {
           $scope.tracks = audioService.mix(res);
         }).catch(function(err) {
+          $scope.tracks = null;
           toastService.show("Can not load playlist");
         }).finally(function() {
           $scope.loaded = true;
