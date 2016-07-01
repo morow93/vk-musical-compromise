@@ -11,9 +11,7 @@
       $scope.remove = remove;
       $scope.activate = activate;
 
-      $scope.$on("$ionicView.enter", function(e) {
-        activate();
-      });
+      $scope.$on("$ionicView.enter", activate);
 
       function remove(item) {
         $scope.playlists = playlistService.remove(item);

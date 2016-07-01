@@ -13,17 +13,9 @@
       $scope.activate = activate;
       $scope.toggleTrack = toggleTrack;
 
-      $scope.$on("$ionicView.enter", function(e) {
-        activate();
-      });
-
-      $scope.$on("$stateChangeStart", function(){
-        resetAudio();
-      });
-
-      $scope.$on("playlistTabDeselected", function() {
-        resetAudio();
-      });
+      $scope.$on("$ionicView.enter", activate);
+      $scope.$on("$stateChangeStart", resetAudio);
+      $scope.$on("playlistTabDeselected", resetAudio);
 
       function toggleTrack(track, index) {
 
@@ -96,7 +88,7 @@
         resetAudio();
         $scope.loaded = false;
 
-        if (!angular.isDefined($stateParams.playlistId)) {
+        if (!angular.isDefined($stateParams.playlistId)) {          
           $scope.loaded = true;
           toastService.show("Can not load playlist");
           // Stop the ion-refresher from spinning
