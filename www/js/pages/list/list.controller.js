@@ -4,9 +4,9 @@
 
     angular.module("pages.list").controller("ListController", listController);
 
-    listController.$inject = ["$scope", "PlaylistService"];
+    listController.$inject = ["$scope", "PlaylistService", "$timeout"];
 
-    function listController($scope, playlistService) {
+    function listController($scope, playlistService, $timeout) {
 
       $scope.remove = remove;
       $scope.activate = activate;
@@ -19,8 +19,10 @@
 
       function activate() {
         $scope.loaded = false;
-        $scope.playlists = playlistService.get();
-        $scope.loaded = true;
+        $timeout(function(){
+          $scope.playlists = playlistService.get();
+          $scope.loaded = true;
+        }, 1000);
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
       }

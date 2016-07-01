@@ -37,6 +37,7 @@
           $scope.friends = result;
         }).catch(function(err) {
           toastService.show("Can not load friends");
+          $scope.friends = null;
         }).finally(function() {
           $scope.loaded = true;
           // Stop the ion-refresher from spinning
