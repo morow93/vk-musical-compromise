@@ -4,9 +4,9 @@
 
   angular.module("core.services").factory("AuthService", authService);
 
-  authService.$inject = ["$q", "$cordovaOauth", "localStorageService", "$http", "constants"];
+  authService.$inject = ["$q", "$cordovaOauth", "localStorageService", "$http", "values"];
 
-    function authService($q, $cordovaOauth, localStorageService, $http, constants) {
+    function authService($q, $cordovaOauth, localStorageService, $http, values) {
 
       /*
         Т.к cordova не работает, для дебага на пк вручную помещаем токен в localStorage
@@ -41,7 +41,7 @@
         var deferred = $q.defer();
         var userInfo = localStorageService.get("authInfo");
         if (userInfo){
-          $http.get(constants.baseVk +
+          $http.get(values.baseVk +
             '/users.get?fields=photo_100&access_token='
             + userInfo["access_token"]).then(function (res) {
             deferred.resolve(res.data);
