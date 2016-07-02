@@ -11,7 +11,7 @@
       //$scope.activate = activate;
       $scope.toggleTrack = audioManager.toggleTrack;
 
-      $scope.$on("$ionicView.enter", function() { audioManager.activate().then(success) });
+      $scope.$on("$ionicView.enter", function() { audioManager.activate($scope).then(success) });
       $scope.$on("$stateChangeStart", audioManager.resetAudio);
       $scope.$on("playlistTabDeselected", audioManager.resetAudio);
 

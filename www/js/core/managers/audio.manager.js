@@ -36,8 +36,8 @@
     }
 
     function toggleTrack(track, index) {
-      index = index || service.currentTrack.index;
       track = track || service.currentTrack;
+      service.currentTrack.index = service.currentTrack.index || index;
 
       if (service.currentTrack.index !== index){
         // Disable previous track
@@ -76,20 +76,22 @@
       }
 
       function continueToPlay() {
-        service.currentTrack.playing = false;
-        service.currentTrack.audio.pause();
-        var nextTrackIndex = service.currentTrack.index + 1;
+        service.scope.$apply(function() {
+          service.currentTrack.playing = false;
+          service.currentTrack.audio.pause();
+          var nextTrackIndex = service.currentTrack.index + 1;
 
-        if (service.tracks[nextTrackIndex]){
-          service.currentTrack = service.tracks[nextTrackIndex];
-          service.currentTrack.playing = true;
-          service.currentTrack.index = nextTrackIndex;
+          if (service.tracks[nextTrackIndex]) {
+            service.currentTrack = service.tracks[nextTrackIndex];
+            service.currentTrack.playing = true;
+            service.currentTrack.index = nextTrackIndex;
 
-          service.currentTrack.audio = new Audio(service.tracks[nextTrackIndex].url);
-          service.currentTrack.audio.addEventListener("ended", continueToPlay);
-          service.currentTrack.audio.addEventListener("error", continueToPlay);
-          service.currentTrack.audio.play();
-        }
+            service.currentTrack.audio = new Audio(service.tracks[nextTrackIndex].url);
+            service.currentTrack.audio.addEventListener("ended", continueToPlay);
+            service.currentTrack.audio.addEventListener("error", continueToPlay);
+            service.currentTrack.audio.play();
+          }
+        });
       }
 
     }
@@ -106,7 +108,9 @@
       service.loaded = false;
     }
 
-    function activate() {
+    function activate(scope) {
+      service.scope = scope;
+
       var deferred = $q.defer();
 
       resetAudio();
@@ -117,6 +121,7 @@
 
       if (!angular.isDefined($stateParams.playlistId)) {
         toastService.show("Can not load service.playlist");
+        service.scope.$broadcast('scroll.refreshComplete');
         deferred.reject({
           tracks: service.tracks,
           loaded: service.loaded,
@@ -128,6 +133,7 @@
       service.playlist = playlistService.get($stateParams.playlistId);
       if (!service.playlist || !service.playlist.friends) {
         toastService.show("Can not load service.playlist");
+        service.scope.$broadcast('scroll.refreshComplete');
         deferred.reject({
           tracks: service.tracks,
           loaded: service.loaded,
@@ -155,6 +161,8 @@
           playlist: service.playlist
         });
         toastService.show("Can not load service.playlist");
+      }).finally(function () {
+        service.scope.$broadcast('scroll.refreshComplete');
       });
 
       return deferred.promise;
