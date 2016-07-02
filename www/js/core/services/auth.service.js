@@ -4,21 +4,14 @@
 
   angular.module("core.services").factory("AuthService", authService);
 
-  authService.$inject = ["$q", "$cordovaOauth", "localStorageService", "$http", "config"];
+  authService.$inject = ["$q", "$cordovaOauth", "localStorageService", "$http", "constants"];
 
-    function authService($q, $cordovaOauth, localStorageService, $http, config) {
+    function authService($q, $cordovaOauth, localStorageService, $http, constants) {
 
       /*
         Т.к cordova не работает, для дебага на пк вручную помещаем токен в localStorage
         token взят для моего фейка vk.com/bob_green
       */
-      if (config.debug) {
-        var authInfo = {};
-        authInfo["expires_in"] = 86400;
-        authInfo["expires_at"] = moment().add(authInfo["expires_in"] - 10, 'seconds').toDate();
-        authInfo["access_token"] = "726dacfff3ec43c0f3398ca3c4064233754529c360a868e7107a49c27dccf7ab710cc17891b10f0c75fb4";
-        localStorageService.set("authInfo", authInfo);
-      }
 
       var service = {
         run: run,
@@ -48,7 +41,7 @@
         var deferred = $q.defer();
         var userInfo = localStorageService.get("authInfo");
         if (userInfo){
-          $http.get(config.baseVk +
+          $http.get(constants.baseVk +
             '/users.get?fields=photo_100&access_token='
             + userInfo["access_token"]).then(function (res) {
             deferred.resolve(res.data);
