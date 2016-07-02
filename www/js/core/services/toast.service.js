@@ -2,7 +2,7 @@
 
   "use strict";
 
-  angular.module("app").factory("ToastService", toastService);
+  angular.module("core.services").factory("ToastService", toastService);
 
   toastService.$inject = ["$cordovaToast"];
 

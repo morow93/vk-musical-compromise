@@ -11,3 +11,20 @@
   </ion-tab>
 
 </ion-tabs>
+
+<div class="range duration-range" ng-show="getCurrentTrack().audio != null">
+  <input type="range" name="volume" min="0" max="{{ getCurrentTrack().audio.duration }}"
+         ng-model="getCurrentTrack().currentTime">
+</div>
+<ion-footer-bar ng-show="getCurrentTrack().audio != null" align-title="left" class="bar-stable bar-music-vk">
+  <div class="item-icon-left">
+    <i class="icon" ng-class="{'ion-ios-pause': getCurrentTrack().playing, 'ion-ios-play': !getCurrentTrack().playing}"
+       ng-click="toggleTrack()"></i>
+  </div>
+  <h1 class="title">
+    <span>
+      <span ng-bind="getCurrentTrack().artist"></span> -
+      <span ng-bind="getCurrentTrack().title"></span>
+    </span>
+  </h1>
+</ion-footer-bar>

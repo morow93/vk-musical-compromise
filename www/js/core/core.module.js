@@ -7,7 +7,8 @@
     "ngCordova",
     "ngCordovaOauth",
     "LocalStorageModule",
-    "core.services"
+    "core.services",
+    "core.managers"
   ]);
 
 })();
