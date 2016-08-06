@@ -4,13 +4,11 @@
 
     angular.module("app.pages").controller("PagesController", pagesController);
 
-    pagesController.$inject = ["$scope", "ToastService", "AudioManager"];
+    pagesController.$inject = ["$scope", "ToastService"];
 
-    function pagesController($scope, toastService, audioManager) {
+    function pagesController($scope, toastService) {
 
       $scope.onPlaylistTabDeselected = onPlaylistTabDeselected;
-      $scope.getCurrentTrack = audioManager.getCurrentTrack;
-      $scope.toggleTrack = audioManager.toggleTrack;
 
       function onPlaylistTabDeselected() {
         $scope.$broadcast("playlistTabDeselected");

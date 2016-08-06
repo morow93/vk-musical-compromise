@@ -2,11 +2,11 @@
   <ion-content>
     <ion-refresher on-refresh="activate()" spinner="none">
     </ion-refresher>
-    <!-- Friends -->
-    <section ng-if="loaded && friends">
+    <!-- Members -->
+    <section ng-if="loaded && members">
       <div id='new-playlist-card' class="card" on-drag="closeCard()" ng-if="$root.showNewPlaylistCard">
           <div class="item item-body custom-item-body">
-            <p style="">Select your friends, whose music you want to listen.</p>
+            <p style="">Select people, whose music you want to listen.</p>
             <button class="button button-light" ng-click="closeCard()" style="">
               <i class="ion-close-round"> </i>
             </button>
@@ -17,20 +17,20 @@
         <input id="search-input" type="search" placeholder="Search" ng-model="searchTerm.$">
       </label>
       <ion-list type="item-text-wrap">
-        <div collection-repeat="friend in friends | filter:searchTerm:strict" item-render-buffer="5">
-          <ion-checkbox ng-model="friend.isChecked" ng-change="checkFriend(friend)">
-            <span ng-bind="friend['first_name']"></span>
-            <span ng-bind="friend['last_name']"></span>
-          <img class="item-checkbox-img" ng-src="{{friend['photo_100']}}">
+        <div collection-repeat="member in members | filter:searchTerm:strict" item-render-buffer="5">
+          <ion-checkbox ng-model="member.isChecked" ng-change="checkMember(member)">
+            <span ng-bind="member['first_name']"></span>
+            <span ng-bind="member['last_name']"></span>
+          <img class="item-checkbox-img" ng-src="{{member['photo_100']}}">
           </ion-checkbox>
         </div>
       </ion-list>
     </section>
 
-    <!-- No friends -->
-    <section ng-if="loaded && !friends">
+    <!-- No members -->
+    <section ng-if="loaded && !members">
       <h4 class="padding">
-        No friends found
+        No members found
       </h4>
     </section>
 
@@ -41,12 +41,12 @@
 
   </ion-content>
 
-  <ion-footer-bar ng-if="selectedFriendsCounter > 0" align-title="center" class="bar bar-positive">
+  <ion-footer-bar ng-if="selectedMembersCounter > 0" align-title="center" class="bar bar-positive">
     <div class="buttons">
       <button class="button button-icon icon ion-close" ng-click="uncheck()">
       </button>
     </div>
-    <h4 class="title bar-title" ng-bind="selectedFriendsTitle">
+    <h4 class="title bar-title" ng-bind="selectedMembersTitle">
     </h4>
     <div class="buttons">
       <button class="button button-icon icon ion-checkmark" ng-click="create()">

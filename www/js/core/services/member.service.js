@@ -2,11 +2,11 @@
 
   "use strict";
 
-  angular.module("core.services").factory("FriendService", friendService);
+  angular.module("core.services").factory("MemberService", memberService);
 
-  friendService.$inject = ["$q", "$http", "localStorageService", "values"];
+  memberService.$inject = ["$q", "$http", "localStorageService", "values"];
 
-  function friendService($q, $http, localStorageService, values) {
+  function memberService($q, $http, localStorageService, values) {
 
     var service = {
       get: get

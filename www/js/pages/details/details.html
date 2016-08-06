@@ -2,6 +2,34 @@
   <ion-content>
     <ion-refresher on-refresh="activate()" spinner="none">
     </ion-refresher>
+
+    <!-- Playlist members -->
+    <div class="members" ng-show="loaded && playlist">
+      <button class="button icon icon-left ion-ios-people button-small" ng-click="openPopoverMembers($event)">
+        <span ng-if="!playlist.members || playlist.members.length === 0">
+          0 Members
+        </span>
+        <span ng-if="playlist.members.length === 1">
+          1 Member
+        </span>
+        <span ng-if="playlist.members.length > 1">
+          <span ng-bind="playlist.members.length"></span> Members
+        </span>
+      </button>
+      <script id="popoverMembers.html" type="text/ng-template">
+        <ion-popover-view>
+          <ion-content>
+            <ion-list ng-if="playlist.members">
+              <ion-item ng-repeat="member in playlist.members">
+                <span ng-bind="member['first_name']"></span>
+                <span ng-bind="member['last_name']"></span>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ion-popover-view>
+      </script>
+    </div>
+
     <!-- Tracks -->
     <section ng-if="loaded && tracks">
       <div class="list" collection-repeat="track in tracks track by $index" item-render-buffer="5">
