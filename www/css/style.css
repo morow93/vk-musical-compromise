@@ -82,10 +82,10 @@
 .members button{
   margin: 10px;
 }
-.popover {
+/*.popover {
     height: auto !important;
     margin-top: 11px !important;
-    max-height: 159px; /* max 3 items, 1 item height equals 53px */
+    max-height: 159px; max 3 items, 1 item height equals 53px
     overflow: hidden;
     margin-left: -5px !important;
 }
@@ -98,4 +98,4 @@
 }
 .popover .item{
   width:calc(100% + 2px);
-}
+}*/

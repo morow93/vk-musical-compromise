@@ -4,9 +4,9 @@
 
     angular.module("pages.list").controller("ListController", listController);
 
-    listController.$inject = ["$scope", "PlaylistService", "$timeout"];
+    listController.$inject = ["$scope", "PlaylistService", "$timeout", "$ionicListDelegate"];
 
-    function listController($scope, playlistService, $timeout) {
+    function listController($scope, playlistService, $timeout, $ionicListDelegate) {
 
       $scope.remove = remove;
       $scope.activate = activate;
@@ -15,6 +15,7 @@
 
       function remove(item) {
         $scope.playlists = playlistService.remove(item);
+        $ionicListDelegate.closeOptionButtons();
       }
 
       function activate() {
