@@ -13,13 +13,16 @@
       mix: mix
     };
 
-    function get(uid) {
+    function get(user) {
       var deferred = $q.defer();
       var userInfo = localStorageService.get("authInfo");
       if (userInfo){
-        $http.get(values.baseVk + '/audio.get?owner_id=' + uid + '&access_token=' + userInfo["access_token"]).then(function (res) {
+        $http.get(values.baseVk + '/audio.get?owner_id=' + user.uid + '&access_token=' + userInfo["access_token"]).then(function (res) {
           if (res.data && angular.isArray(res.data.response)){
             res.data.response.shift();
+            angular.forEach(res.data.response, function(item) {
+              item['photo_100'] = user['photo_100']
+            });
           }
           deferred.resolve(res.data);
         }).catch(function(err){

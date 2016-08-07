@@ -144,7 +144,7 @@
 
       baseHttpService.run(function() {
         return service.playlist.members.map(function(item) {
-          return audioService.get(item.uid);
+          return audioService.get(item);
         });
       }).then(function(res) {
         service.tracks = audioService.mix(res);

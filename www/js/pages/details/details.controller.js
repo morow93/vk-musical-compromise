@@ -106,7 +106,7 @@
 
         baseHttpService.run(function() {
           return $scope.playlist.members.map(function(item) {
-            return audioService.get(item.uid);
+            return audioService.get(item);
           });
         }).then(function(res) {
           $scope.tracks = audioService.mix(res);

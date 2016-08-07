@@ -85,3 +85,12 @@
 .popover-members{
   margin-left: -5px !important;
 }
+.playing-track{
+  background: #ddd;
+}
+.track-img{
+  visibility: hidden;
+}
+.playing-track > .track-img {
+  visibility: visible;
+}
