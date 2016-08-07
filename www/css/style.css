@@ -85,8 +85,12 @@
 .popover-members{
   margin-left: -5px !important;
 }
+.popover-members .item{
+  padding-right: 70px;
+}
 .playing-track{
   background: #ddd;
+  padding-right: 70px;
 }
 .track-img{
   visibility: hidden;
