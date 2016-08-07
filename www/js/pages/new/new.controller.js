@@ -24,6 +24,10 @@
         $scope.selectedMembersCounter = 0;
         $scope.selectedMembersTitle = "";
 
+        $scope.forms = {
+            popupForm: {}
+        };
+
         baseHttpService.run(function() {
           return [
             authService.getMe(),
@@ -94,23 +98,28 @@
           }
         });
 
-        $scope.playlistName = 'Playlist #' + (playlistService.get().length + 1);
+        $scope.popupData = getPopupData();
 
         var confirmPopup = $ionicPopup.show({
           title: 'New Playlist',
-          template: '<input type="text" ng-model="playlistName" placeholder="Choose playlist name">',
+          template: '<form name="forms.popupForm"><input type="text" name="playlistTitle" ng-model="popupData.playlistTitle" placeholder="Choose playlist name" /></form>',
           scope: $scope,
           buttons: [
             { text: 'Cancel' },
             {
               text: '<b>Create</b>',
+              scope: $scope,
               type: 'button-positive',
               onTap: function(e) {
-                if (!$scope.playlistName) {
+                if (!$scope.popupData.playlistTitle) {
                   // Don't allow the user to close unless he enters name
                   e.preventDefault();
                 } else {
-                  return $scope.playlistName;
+                  if ($scope.forms.popupForm.$pristine){
+                    $scope.popupData.playlistDefaultName = true;
+                  }
+                  $scope.forms.popupForm.$setPristine();
+                  return $scope.popupData;
                 }
               }
             }
@@ -120,7 +129,9 @@
         confirmPopup.then(function(res) {
           if (res){
             playlistService.create({
-              title: res,
+              title: res.playlistTitle,
+              defaultName: res.playlistDefaultName,
+              number: res.playlistNumber,
               members: selectedMembers,
               createdAt: new Date()
             });
@@ -128,6 +139,31 @@
           }
         });
 
+        function getPopupData() {
+
+          var number = null;
+          var keepGoing = true;
+          var numbers = playlistService.get().filter(function(it) { return it.defaultName; }).map(function(it){ return it.number; }).sort();
+
+          angular.forEach(numbers, function(it, index) {
+            if (keepGoing){
+              if (it && it != (index + 1)){
+                keepGoing = false;
+                number = index + 1;
+              }
+            }
+          });
+
+          if (!number){
+            number = numbers.length + 1;
+          }
+
+          return {
+            playlistTitle: 'Playlist #' + number,
+            playlistNumber: number
+          };
+
+        }
       }
 
     }
