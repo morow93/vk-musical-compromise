@@ -23,6 +23,7 @@
             angular.forEach(res.data.response, function(item) {
               item['photo_100'] = user['photo_100']
             });
+            res.data.response['owner_id'] = user.uid;
           }
           deferred.resolve(res.data);
         }).catch(function(err){

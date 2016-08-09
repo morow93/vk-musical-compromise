@@ -1,3 +1,7 @@
+.custom-title {
+  color: #444 !important;
+  font-size: 17px;  
+}
 .item-checkbox-img {
   vertical-align: middle;
   position: absolute;

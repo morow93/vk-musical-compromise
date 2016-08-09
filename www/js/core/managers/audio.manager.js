@@ -52,6 +52,7 @@
         });
       }).then(function(res) {
         manager.scope.tracks = audioService.mix(res);
+        checkNotLoadedUsers(res);
       }).catch(function(err) {
         manager.scope.tracks = null;
         toastService.show("Can not load playlist");
@@ -66,6 +67,23 @@
       }).then(function(popoverMembers) {
         manager.scope.popoverMembers = popoverMembers;
       });
+
+      function checkNotLoadedUsers(tracks) {
+        var loadedUsers = tracks.map(function(it) {
+            return it['owner_id'];
+        });
+        var notLoadedUsers = manager.scope.playlist.members.filter(function(it) {
+            return loadedUsers.indexOf(it.uid) < 0;
+        });
+        if (notLoadedUsers && notLoadedUsers.length > 0){
+          var notLoadedTitle = "Tracks weren't downloaded for";
+          angular.forEach(notLoadedUsers, function(it, i) {
+            var separator = ((i + 1) !== notLoadedUsers.length) ? "," : ".";
+            notLoadedTitle += " " + it["first_name"] + " " + it["last_name"] + separator;
+          });
+          toastService.showLong(notLoadedTitle);
+        }
+      }
 
     }
 

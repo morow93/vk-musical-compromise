@@ -31,8 +31,8 @@
     </section>
 
     <!-- No tracks -->
-    <section ng-if="loaded && !tracks">
-      <h4 class="padding">
+    <section ng-if="loaded && (!tracks || tracks.length === 0)">
+      <h4 class="padding custom-title">
         No tracks found
       </h4>
     </section>

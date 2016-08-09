@@ -28,8 +28,8 @@
     </section>
 
     <!-- No members -->
-    <section ng-if="loaded && !members">
-      <h4 class="padding">
+    <section ng-if="loaded && (!members || members.length === 0)">
+      <h4 class="padding custom-title">
         No members found
       </h4>
     </section>
