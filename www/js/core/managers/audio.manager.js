@@ -2,169 +2,144 @@
 
   "use strict";
 
-  angular.module("core.services").factory("AudioManager", AudioManager);
+  angular.module("core.managers").factory("AudioManager", audioManager);
 
-  AudioManager.$inject = ["ToastService", "PlaylistService", "BaseHttpService",
-    "AudioService", "$stateParams", "$q"];
+  audioManager.$inject = ["$rootScope", "ToastService", "PlaylistService", "BaseHttpService",
+    "AudioService", "$stateParams", "$q", "$ionicPopover"];
 
-  function AudioManager (toastService, playlistService, baseHttpService, audioService, $stateParams, $q) {
+  function audioManager ($rootScope, toastService, playlistService, baseHttpService, audioService, $stateParams, $q, $ionicPopover) {
 
-    //TODO refactor this govnokod
+    var manager = this;
 
-    var service = {
-      toggleTrack: toggleTrack,
-      activate: activate,
-      resetAudio: resetAudio,
-      getCurrentTrack: getCurrentTrack,
-      getTracks: getTracks,
-      isLoaded: isLoaded,
-      getCurrentPlaylist: getCurrentPlaylist
-    };
+    manager.activate = activate;
+    manager.resetState = resetState;
+    manager.toggleTrack = toggleTrack;
+    manager.openPopoverMembers = openPopoverMembers;
 
-    function getTracks() {
-      return service.tracks;
+    function activate(scope) {
+
+      manager.scope = scope;
+
+      // Needed for view
+      manager.scope.pointer = $rootScope.pointer = {};
+
+      resetState();
+      manager.scope.loaded = false;
+
+      if (!angular.isDefined($stateParams.playlistId)) {
+        manager.scope.tracks = null;
+        manager.scope.loaded = true;
+        toastService.show("Can not load playlist");
+        // Stop the ionrefresher from spinning
+        manager.scope.$broadcast('scroll.refreshComplete');
+        return;
+      }
+
+      manager.scope.playlist = playlistService.get($stateParams.playlistId);
+      if (!manager.scope.playlist || !manager.scope.playlist.members) {
+        manager.scope.tracks = null;
+        manager.scope.loaded = true;
+        toastService.show("Can not load playlist");
+        // Stop the ionrefresher from spinning
+        manager.scope.$broadcast('scroll.refreshComplete');
+        return;
+      }
+
+      baseHttpService.run(function() {
+        return manager.scope.playlist.members.map(function(item) {
+          return audioService.get(item);
+        });
+      }).then(function(res) {
+        manager.scope.tracks = audioService.mix(res);
+      }).catch(function(err) {
+        manager.scope.tracks = null;
+        toastService.show("Can not load playlist");
+      }).finally(function() {
+        manager.scope.loaded = true;
+        // Stop the ionrefresher from spinning
+        manager.scope.$broadcast('scroll.refreshComplete');
+      });
+
+      $ionicPopover.fromTemplateUrl('popoverMembers.html', {
+        scope: manager.scope
+      }).then(function(popoverMembers) {
+        manager.scope.popoverMembers = popoverMembers;
+      });
+
     }
 
-    function getCurrentTrack() {
-      return service.currentTrack;
-    }
-
-    function getCurrentPlaylist() {
-      return service.playlist;
-    }
-
-    function isLoaded() {
-      return service.loaded;
+    function resetState() {
+      // Refers to current playing track
+      manager.scope.pointer.track = {};
+      if (manager.scope.pointer.audio){
+        manager.scope.pointer.audio.pause();
+      }
+      // Will be audio object
+      manager.scope.pointer.audio = null;
+      // Close popover
+      manager.scope.popoverMembers && manager.scope.popoverMembers.hide();
     }
 
     function toggleTrack(track, index) {
-
-      track = angular.extend(track, { index: index });
-      //track = track || service.currentTrack;
-      //service.currentTrack.index =  angular.isDefined(index) ? index : service.currentTrack.index;
-
-      if (angular.isDefined(service.currentTrack.index) && service.currentTrack.index !== index){
+      if (manager.scope.pointer.track.index !== index){
         // Disable previous track
-        service.currentTrack.playing = false;
-        if (service.currentTrack.audio){
-            service.currentTrack.audio.pause();
-        }
+        manager.scope.pointer.track.playing = false;
       }
-
       track.playing = !track.playing;
-      var previousTrack = angular.copy(service.currentTrack);
-      service.currentTrack = track;
+      var previousTrack = angular.copy(manager.scope.pointer.track);
+      manager.scope.pointer.track = angular.extend(track, { index: index });
 
-      if (service.currentTrack.index === previousTrack.index){
-        if(!service.currentTrack.audio){
-          service.currentTrack.audio = new Audio(service.currentTrack.url);
-          service.currentTrack.audio.addEventListener("ended", continueToPlay);
-          service.currentTrack.audio.addEventListener("error", continueToPlay);
+      if (manager.scope.pointer.track.index === previousTrack.index){
+        if(!manager.scope.pointer.audio){
+          manager.scope.pointer.audio = new Audio(track.url);
+          manager.scope.pointer.audio.addEventListener("ended", continueToPlay);
+          manager.scope.pointer.audio.addEventListener("error", continueToPlay);
         }
-        if (service.currentTrack.playing){
-          service.currentTrack.audio.play();
+        if (track.playing){
+          manager.scope.pointer.audio.play();
         }else{
-          service.currentTrack.audio.pause();
+          manager.scope.pointer.audio.pause();
         }
       }else{
-        if (service.currentTrack.audio){
-          service.currentTrack.audio.pause();
+        if (manager.scope.pointer.audio){
+          manager.scope.pointer.audio.pause();
         }
-        if (service.currentTrack.playing){
-          service.currentTrack.audio = new Audio(service.currentTrack.url);
-          service.currentTrack.audio.addEventListener("ended", continueToPlay);
-          service.currentTrack.audio.addEventListener("error", continueToPlay);
-          service.currentTrack.audio.play();
+        if (track.playing){
+          manager.scope.pointer.audio = new Audio(track.url);
+          manager.scope.pointer.audio.addEventListener("ended", continueToPlay);
+          manager.scope.pointer.audio.addEventListener("error", continueToPlay);
+          manager.scope.pointer.audio.play();
         }else{
-          service.currentTrack.audio.pause();
+          manager.scope.pointer.audio.pause();
         }
       }
 
       function continueToPlay() {
+        manager.scope.$apply(function(){
+          manager.scope.pointer.track.playing = false;
+          var nextTrackIndex = manager.scope.pointer.track.index + 1;
 
-        service.scope.$apply(function() {
-          service.currentTrack.playing = false;
-          service.currentTrack.audio.pause();
-          var nextTrackIndex = service.currentTrack.index + 1;
+          if (manager.scope.tracks[nextTrackIndex]){
+            manager.scope.pointer.track = manager.scope.tracks[nextTrackIndex];
+            manager.scope.pointer.track.playing = true;
+            manager.scope.pointer.track.index = nextTrackIndex;
 
-          if (service.tracks[nextTrackIndex]) {
-            service.currentTrack = service.tracks[nextTrackIndex];
-            service.currentTrack.playing = true;
-            service.currentTrack.index = nextTrackIndex;
-
-            service.currentTrack.audio = new Audio(service.tracks[nextTrackIndex].url);
-            service.currentTrack.audio.addEventListener("ended", continueToPlay);
-            service.currentTrack.audio.addEventListener("error", continueToPlay);
-            service.currentTrack.audio.play();
+            manager.scope.pointer.audio = new Audio(manager.scope.tracks[nextTrackIndex].url);
+            manager.scope.pointer.audio.addEventListener("ended", continueToPlay);
+            manager.scope.pointer.audio.addEventListener("error", continueToPlay);
+            manager.scope.pointer.audio.play();
           }
         });
       }
-
     }
 
-    function resetAudio() {
-
-      if (service.currentTrack){
-        service.currentTrack.playing = false;
-        if (service.currentTrack.audio){
-          service.currentTrack.audio.pause();
-        }
-      }else{
-        service.currentTrack = {};
+    function openPopoverMembers($event) {
+      if (manager.scope.playlist && manager.scope.playlist.members && manager.scope.playlist.members.length > 0){
+          manager.scope.popoverMembers.show($event);
       }
-      service.loaded = false;
     }
 
-    function activate(scope) {
-
-      service.scope = scope;
-
-      var deferred = $q.defer();
-
-      resetAudio();
-
-      service.tracks = null;
-      service.playlist = null;
-      service.loaded = true;
-
-      if (!angular.isDefined($stateParams.playlistId)) {
-        toastService.show("Can not load playlist");
-        service.scope.$broadcast('scroll.refreshComplete');
-        deferred.reject({ error: true });
-        return deferred.promise;
-      }
-
-      service.playlist = playlistService.get($stateParams.playlistId);
-      if (!service.playlist || !service.playlist.members) {
-        toastService.show("Can not load playlist");
-        service.scope.$broadcast('scroll.refreshComplete');
-        deferred.reject({ error: true });
-        return deferred.promise;
-      }
-
-      baseHttpService.run(function() {
-        return service.playlist.members.map(function(item) {
-          return audioService.get(item);
-        });
-      }).then(function(res) {
-        service.tracks = audioService.mix(res);
-        deferred.resolve({
-          tracks: service.tracks,
-          loaded: service.loaded,
-          playlist: service.playlist
-        });
-      }).catch(function(err) {
-        service.tracks = null;
-        deferred.reject({ error: true });
-        toastService.show("Can not load playlist");
-      }).finally(function () {
-        service.scope.$broadcast('scroll.refreshComplete');
-      });
-
-      return deferred.promise;
-    }
-
-    return service;
+    return manager;
 
   }
 

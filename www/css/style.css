@@ -35,56 +35,6 @@
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
 }
-
-.bar-music-vk {
-  background-color: #e8edf4 !important;
-}
-
-.duration-range {
-  position: fixed;
-  z-index: 99;
-  bottom: 24px;
-  left: 0;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.duration-range input[type=range] {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
-
-.duration-range input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-  background: #507299;
-  /*border-radius: 1.3px;*/
-  /*border: 0.2px solid #010101;*/
-}
-
-.duration-range input[type=range]::-webkit-slider-thumb {
-  width: 20px;
-  height: 20px;
-  margin-top: -9.2px;
-  background-color: #507299;
-  /*margin: 0;*/
-  /*padding: 0;*/
-  /*top: 0;*/
-}
-
-.members{
-  text-align:right;
-}
-.members button{
-  margin: 10px;
-}
-.popover-members{
-  margin-left: -5px !important;
-}
 .popover-members .item{
   padding-right: 70px;
 }
@@ -97,4 +47,8 @@
 }
 .playing-track > .track-img {
   visibility: visible;
+}
+.button-nav > span{
+  display: inline !important;
+  margin-left: 0px !important;
 }

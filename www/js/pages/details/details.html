@@ -1,42 +1,25 @@
 <ion-view view-title="{{playlist.title}}" cache-view="false">
+  <ion-nav-buttons side="right">
+    <button class="button icon icon-left ion-ios-people button-nav" ng-click="openPopoverMembers($event)" ng-show="loaded && playlist">
+      <span ng-if="!playlist.members || playlist.members.length === 0">
+        0 Members
+      </span>
+      <span ng-if="playlist.members.length === 1">
+        1 Member
+      </span>
+      <span ng-if="playlist.members.length > 1">
+        <span ng-bind="playlist.members.length"></span> Members
+      </span>
+    </button>
+  </ion-nav-buttons>
   <ion-content>
     <ion-refresher on-refresh="activate()" spinner="none">
     </ion-refresher>
 
-    <!-- Playlist members -->
-    <div class="members" ng-show="loaded && playlist">
-      <button class="button icon icon-left ion-ios-people button-small" ng-click="openPopoverMembers($event)">
-        <span ng-if="!playlist.members || playlist.members.length === 0">
-          0 Members
-        </span>
-        <span ng-if="playlist.members.length === 1">
-          1 Member
-        </span>
-        <span ng-if="playlist.members.length > 1">
-          <span ng-bind="playlist.members.length"></span> Members
-        </span>
-      </button>
-      <script id="popoverMembers.html" type="text/ng-template">
-        <!-- item height equals 52px + 2px top border + 2px bottom border -->
-        <!-- 159px is a constant height for 3 items list -->
-        <ion-popover-view style="height: {{((playlist.members.length > 3 ? 159 : 54 * playlist.members.length) + 4) + 'px'}};" class="popover-members">
-          <ion-content>
-            <ion-list ng-if="playlist.members">
-              <ion-item ng-repeat="member in playlist.members">
-                <span ng-bind="member['first_name']"></span>
-                <span ng-bind="member['last_name']"></span>
-                <img class="item-checkbox-img" ng-src="{{member['photo_100']}}">
-              </ion-item>
-            </ion-list>
-          </ion-content>
-        </ion-popover-view>
-      </script>
-    </div>
-
     <!-- Tracks -->
     <section ng-if="loaded && tracks">
       <div class="list" collection-repeat="track in tracks track by $index" item-render-buffer="5">
-       <div class="item item-icon-left" ng-class="{'playing-track' : currentTrack.index >= 0 && track.index === currentTrack.index}">
+       <div class="item item-icon-left" ng-class="{'playing-track' : pointer.track.index >= 0 && track.index === pointer.track.index}">
           <i class="icon" ng-class="{'ion-ios-pause': track.playing, 'ion-ios-play': !track.playing}" ng-click="toggleTrack(track, $index)"></i>
           <span>
             <span ng-bind="track.artist"></span> -
@@ -58,6 +41,23 @@
     <section ng-if="!loaded" class="custom-spinner">
       <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>
+
+    <!-- Playlist members -->
+    <script id="popoverMembers.html" type="text/ng-template">
+      <!-- item height equals 52px + 2px top border + 2px bottom border -->
+      <!-- 159px is a constant height for 3 items list -->
+      <ion-popover-view style="height: {{((playlist.members.length > 3 ? 159 : 54 * playlist.members.length) + 4) + 'px'}};" class="popover-members">
+        <ion-content>
+          <ion-list ng-if="playlist.members">
+            <ion-item ng-repeat="member in playlist.members">
+              <span ng-bind="member['first_name']"></span>
+              <span ng-bind="member['last_name']"></span>
+              <img class="item-checkbox-img" ng-src="{{member['photo_100']}}">
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-popover-view>
+    </script>
 
   </ion-content>
 </ion-view>
