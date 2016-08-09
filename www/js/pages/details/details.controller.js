@@ -4,12 +4,10 @@
 
     angular.module("pages.details").controller("DetailsController", detailsController);
 
-    detailsController.$inject = ["$q", "$scope", "$ionicPopup", "MemberService", "AuthService", "ToastService", "PlaylistService",
-      "$state", "$timeout", "$stateParams", "AudioService", "BaseHttpService", "$ionicPopover", "AudioManager"];
+    detailsController.$inject = ["$scope", "AudioManager"];
 
-    function detailsController($q, $scope, $ionicPopup, memberService, authService, toastService, playlistService,
-      $state, $timeout, $stateParams, audioService, baseHttpService, $ionicPopover, audioManager) {
-      
+    function detailsController($scope, audioManager) {
+
       $scope.openPopoverMembers = audioManager.openPopoverMembers;
       $scope.toggleTrack = audioManager.toggleTrack;
 

@@ -4,9 +4,11 @@
 
     angular.module("pages.new").controller("NewController", newController);
 
-    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "MemberService", "AuthService", "ToastService", "PlaylistService", "$state", "$timeout", "$q", "BaseHttpService"];
+    newController.$inject = ["$rootScope", "$scope", "$ionicPopup", "MemberService", "AuthService", "ToastService",
+      "PlaylistService", "$state", "BaseHttpService"];
 
-    function newController($rootScope, $scope, $ionicPopup, memberService, authService, toastService, playlistService, $state, $timeout, $q, baseHttpService) {
+    function newController($rootScope, $scope, $ionicPopup, memberService, authService, toastService,
+      playlistService, $state, baseHttpService) {
 
       $scope.closeCard = closeCard;
       $scope.checkMember = checkMember;

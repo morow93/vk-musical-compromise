@@ -5,9 +5,10 @@
   angular.module("core.managers").factory("AudioManager", audioManager);
 
   audioManager.$inject = ["$rootScope", "ToastService", "PlaylistService", "BaseHttpService",
-    "AudioService", "$stateParams", "$q", "$ionicPopover"];
+    "AudioService", "$stateParams", "$ionicPopover"];
 
-  function audioManager ($rootScope, toastService, playlistService, baseHttpService, audioService, $stateParams, $q, $ionicPopover) {
+  function audioManager ($rootScope, toastService, playlistService, baseHttpService,
+    audioService, $stateParams, $ionicPopover) {
 
     var manager = this;
 
