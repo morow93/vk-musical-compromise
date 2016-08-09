@@ -1,6 +1,6 @@
 .custom-title {
   color: #444 !important;
-  font-size: 17px;  
+  font-size: 17px;
 }
 .item-checkbox-img {
   vertical-align: middle;
@@ -38,6 +38,10 @@
 .list .item.item-accordion.ng-hide-add,
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
+}
+.popover-members{
+  margin-top: 5px !important;
+  margin-right: 0px !important;
 }
 .popover-members .item{
   padding-right: 70px;
