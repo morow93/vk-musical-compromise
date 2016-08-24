@@ -17,15 +17,9 @@
       function run() {
         var deferred = $q.defer();
         var authInfo = localStorageService.get("authInfo");
-        
-        if (authInfo){
-          var expiresDate = new Date(authInfo["expires_at"]);
-          var nowDate = new Date();
-        }
 
-        if (!authInfo || (authInfo && expiresDate < nowDate)){
+        if (!authInfo){
           $cordovaOauth.vkontakte("5509706", ["audio", "offline"]).then(function(res) {
-            res["expires_at"] = moment().add(res["expires_in"] - 10, 'seconds').toDate();
             localStorageService.set("authInfo", res);
             deferred.resolve(res);
           }, function(err) {
