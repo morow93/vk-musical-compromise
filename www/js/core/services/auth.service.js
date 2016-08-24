@@ -8,11 +8,6 @@
 
     function authService($q, $cordovaOauth, localStorageService, $http, values) {
 
-      /*
-        Т.к cordova не работает, для дебага на пк вручную помещаем токен в localStorage
-        token взят для моего фейка vk.com/bob_green
-      */
-
       var service = {
         run: run,
         clear: clear,
@@ -22,7 +17,13 @@
       function run() {
         var deferred = $q.defer();
         var authInfo = localStorageService.get("authInfo");
-        if (!authInfo || (authInfo && authInfo["expires_at"] < new Date())){
+        
+        if (authInfo){
+          var expiresDate = new Date(authInfo["expires_at"]);
+          var nowDate = new Date();
+        }
+
+        if (!authInfo || (authInfo && expiresDate < nowDate)){
           $cordovaOauth.vkontakte("5509706", ["audio", "offline"]).then(function(res) {
             res["expires_at"] = moment().add(res["expires_in"] - 10, 'seconds').toDate();
             localStorageService.set("authInfo", res);
