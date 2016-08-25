@@ -29,6 +29,8 @@
             });
           }else{
             // cordovaOauth does not work on the PC so for debug you need manually put the access_token into localStorage
+            // link for get token:
+            // http://oauth.vk.com/authorize?client_id=5509706&scope=audio,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token
             authInfo = {
               access_token: "3617005547f04ba0b9d5654889987683d750a64791cd221dac6a7488db50f5a3e67b1c855b55e62e26d24"
             };
@@ -43,7 +45,7 @@
 
       function getMe() {
         var deferred = $q.defer();
-        
+
         var userInfo = localStorageService.get("authInfo");
         if (userInfo){
           $http.get(values.baseVk +
