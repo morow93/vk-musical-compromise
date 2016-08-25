@@ -20,9 +20,10 @@
         activate();
       });
 
-      function activate() {
+      function activate(refreshing) {
 
         $scope.loaded = false;
+        $scope.refreshing = refreshing === true;
         $scope.selectedMembersCounter = 0;
         $scope.selectedMembersTitle = "";
 
@@ -55,9 +56,6 @@
       function closeCard(){
         // Show for the first time
         $rootScope.showNewPlaylistCard = false;
-
-        var myEl = angular.element(document.querySelector("#new-playlist-card"));
-        myEl.remove();
       }
 
       function checkMember() {

@@ -13,6 +13,10 @@
 
       $scope.$on("$ionicView.enter", activate);
 
+      $scope.$on('$stateChangeSuccess', function(){
+        $ionicListDelegate.closeOptionButtons();
+      });
+
       function remove(item) {
 
         var confirmPopup = $ionicPopup.confirm({
@@ -30,12 +34,16 @@
 
       }
 
-      function activate() {
+      function activate(refreshing) {
+
         $scope.loaded = false;
+        $scope.refreshing = refreshing === true;
+
         $timeout(function(){
           $scope.playlists = playlistService.get();
           $scope.loaded = true;
-        }, 1000);
+        }, 500);
+
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
       }

@@ -1,6 +1,6 @@
 <ion-view view-title="{{playlist.title}}" cache-view="false">
   <ion-nav-buttons side="right">
-    <button class="button icon icon-left ion-ios-people button-nav" ng-click="openPopoverMembers($event)" ng-show="loaded && playlist">
+    <button class="button icon icon-left ion-ios-people button-nav" ng-click="openPopoverMembers($event)" ng-show="playlist">
       <span ng-if="!playlist.members || playlist.members.length === 0">
         0 Members
       </span>
@@ -13,11 +13,11 @@
     </button>
   </ion-nav-buttons>
   <ion-content>
-    <ion-refresher on-refresh="activate()" spinner="android">
+    <ion-refresher on-refresh="activate(true)" spinner="android">
     </ion-refresher>
 
     <!-- Tracks -->
-    <section ng-if="loaded && tracks">
+    <section ng-show="loaded && tracks">
       <div class="list" collection-repeat="track in tracks track by $index" item-render-buffer="5">
        <div class="item item-icon-left" ng-class="{'playing-track' : pointer.track.index >= 0 && track.index === pointer.track.index}">
           <i class="icon" ng-class="{'ion-ios-pause': track.playing, 'ion-ios-play': !track.playing}" ng-click="toggleTrack(track, $index)"></i>
@@ -31,14 +31,14 @@
     </section>
 
     <!-- No tracks -->
-    <section ng-if="loaded && (!tracks || tracks.length === 0)">
+    <section ng-show="loaded && (!tracks || tracks.length === 0)">
       <h4 class="padding custom-title">
         No tracks found
       </h4>
     </section>
 
     <!-- Loading -->
-    <section ng-if="!loaded" class="custom-spinner">
+    <section ng-show="!loaded && !refreshing" class="custom-spinner">
       <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>
 

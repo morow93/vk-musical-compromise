@@ -1,9 +1,9 @@
 <ion-view view-title="Playlists">
   <ion-content>
-    <ion-refresher on-refresh="activate()" spinner="android">
+    <ion-refresher on-refresh="activate(true)" spinner="android">
     </ion-refresher>
     <!-- Playlists -->
-    <section ng-if="loaded && playlists.length > 0">
+    <section ng-show="loaded && playlists.length > 0">
       <ion-list>
         <div collection-repeat="playlist in playlists | orderBy:'-createdAt'" item-render-buffer="5">
           <ion-item class="item-remove-animate item-icon-right" type="item-text-wrap" href="#/tab/list/{{playlist.playlistId}}">
@@ -17,10 +17,15 @@
     </section>
 
     <!-- No playlists -->
-    <section ng-if="loaded && (!playlists || playlists.length == 0)">
+    <section ng-show="loaded && (!playlists || playlists.length == 0)">
       <h4 class="padding custom-title">
         No playlists found
       </h4>
+    </section>
+
+	  <!-- Loading -->
+    <section ng-show="!loaded && !refreshing" class="custom-spinner">
+      <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>
 
   </ion-content>

@@ -1,13 +1,13 @@
 <ion-view view-title="Create new playlist" cache-view="false">
   <ion-content>
-    <ion-refresher on-refresh="activate()" spinner="android">
+    <ion-refresher on-refresh="activate(true)" spinner="android">
     </ion-refresher>
     <!-- Members -->
-    <section ng-if="loaded && members">
-      <div id='new-playlist-card' class="card" on-drag="closeCard()" ng-if="$root.showNewPlaylistCard">
+    <section ng-show="loaded && members">
+      <div class="card" on-drag="closeCard()" ng-if="$root.showNewPlaylistCard">
           <div class="item item-body custom-item-body">
-            <p style="">Select people, whose music you want to listen.</p>
-            <button class="button button-light" ng-click="closeCard()" style="">
+            <p>Select people, whose music you want to listen.</p>
+            <button class="button button-light" ng-click="closeCard()">
               <i class="ion-close-round"> </i>
             </button>
           </div>
@@ -28,14 +28,14 @@
     </section>
 
     <!-- No members -->
-    <section ng-if="loaded && (!members || members.length === 0)">
+    <section ng-show="loaded && (!members || members.length === 0)">
       <h4 class="padding custom-title">
         No members found
       </h4>
     </section>
 
     <!-- Loading -->
-    <section ng-if="!loaded" class="custom-spinner">
+    <section ng-show="!loaded && !refreshing" class="custom-spinner">
       <ion-spinner class="padding custom-spinner" icon="android"></ion-spinner>
     </section>
 

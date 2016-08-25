@@ -17,10 +17,10 @@
     manager.toggleTrack = toggleTrack;
     manager.openPopoverMembers = openPopoverMembers;
 
-    function activate(scope) {
+    function activate(params) {
 
-      if (scope){
-        manager.scope = scope;
+      if (params && angular.isObject(params)){
+        manager.scope = params;
       }
 
       // Needed for view
@@ -28,6 +28,7 @@
 
       resetState();
       manager.scope.loaded = false;
+      manager.scope.refreshing = params === true;
 
       if (!angular.isDefined($stateParams.playlistId)) {
         manager.scope.tracks = null;
