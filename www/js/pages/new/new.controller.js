@@ -69,7 +69,7 @@
           }
         });
         if (counter > 10){
-          toastService.show("Can not select more than 10 people");
+          toastService.show("Can not select more than 10 members");
           member.isChecked = false;
           return;
         }
