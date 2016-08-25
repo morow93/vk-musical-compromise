@@ -103,6 +103,10 @@
     }
 
     function toggleTrack(track, index) {
+
+      if (!angular.isDefined(index) && angular.isDefined(track.index)){
+        index = track.index;
+      }
       if (manager.scope.pointer.track.index !== index){
         // Disable previous track
         manager.scope.pointer.track.playing = false;
@@ -113,9 +117,7 @@
 
       if (manager.scope.pointer.track.index === previousTrack.index){
         if(!manager.scope.pointer.audio){
-          manager.scope.pointer.audio = new Audio(track.url);
-          manager.scope.pointer.audio.addEventListener("ended", continueToPlay);
-          manager.scope.pointer.audio.addEventListener("error", continueToPlay);
+          initializeAudio(track.url);
         }
         if (track.playing){
           manager.scope.pointer.audio.play();
@@ -127,32 +129,59 @@
           manager.scope.pointer.audio.pause();
         }
         if (track.playing){
-          manager.scope.pointer.audio = new Audio(track.url);
-          manager.scope.pointer.audio.addEventListener("ended", continueToPlay);
-          manager.scope.pointer.audio.addEventListener("error", continueToPlay);
+          initializeAudio(track.url);
           manager.scope.pointer.audio.play();
         }else{
           manager.scope.pointer.audio.pause();
         }
       }
 
-      function continueToPlay() {
-        manager.scope.$apply(function(){
-          manager.scope.pointer.track.playing = false;
-          var nextTrackIndex = manager.scope.pointer.track.index + 1;
+    }
 
-          if (manager.scope.tracks[nextTrackIndex]){
-            manager.scope.pointer.track = manager.scope.tracks[nextTrackIndex];
-            manager.scope.pointer.track.playing = true;
-            manager.scope.pointer.track.index = nextTrackIndex;
+    function initializeAudio(url) {
+      manager.scope.pointer.audio = new Audio(url);
 
-            manager.scope.pointer.audio = new Audio(manager.scope.tracks[nextTrackIndex].url);
-            manager.scope.pointer.audio.addEventListener("ended", continueToPlay);
-            manager.scope.pointer.audio.addEventListener("error", continueToPlay);
-            manager.scope.pointer.audio.play();
-          }
-        });
-      }
+      //start loading
+      manager.scope.pointer.audio.addEventListener("loadstart", function() {
+        setCurrentTime(null);
+      });
+
+      //start playing
+      manager.scope.pointer.audio.addEventListener("timeupdate", function(e) {
+        setCurrentTime(e.target.currentTime);
+      });
+
+      manager.scope.pointer.audio.addEventListener("ended", function() {
+        continueToPlay();
+      });
+
+      manager.scope.pointer.audio.addEventListener("error", function(){
+        setCurrentTime(null);
+        continueToPlay();
+      });
+
+    }
+
+    function continueToPlay() {
+      manager.scope.$apply(function(){
+        manager.scope.pointer.track.playing = false;
+        var nextTrackIndex = manager.scope.pointer.track.index + 1;
+
+        if (manager.scope.tracks[nextTrackIndex]){
+          manager.scope.pointer.track = manager.scope.tracks[nextTrackIndex];
+          manager.scope.pointer.track.playing = true;
+          manager.scope.pointer.track.index = nextTrackIndex;
+
+          initializeAudio(manager.scope.tracks[nextTrackIndex].url);
+          manager.scope.pointer.audio.play();
+        }
+      });
+    }
+
+    function setCurrentTime(time) {
+      manager.scope.$apply(function(){
+        manager.scope.pointer.track.currentTime = time;
+      });
     }
 
     function openPopoverMembers($event) {

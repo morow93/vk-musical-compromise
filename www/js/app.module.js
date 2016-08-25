@@ -4,7 +4,8 @@
 
   angular.module("app", [
     "app.core",
-    "app.pages"
+    "app.pages",
+    "app.ui"
   ]);
-  
+
 })();

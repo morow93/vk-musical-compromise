@@ -14,7 +14,7 @@
     };
 
     function get(user) {
-      
+
       var deferred = $q.defer();
       var userInfo = localStorageService.get("authInfo");
       if (userInfo){
@@ -58,8 +58,8 @@
             var currentList = lists[i];
             if (!currentList[indexes[i]]){
               indexes[i] = 0;
-            }
-            result.push(currentList[indexes[i]]);
+            }            
+            result.push(angular.copy(currentList[indexes[i]]));
           }
           for (var j = 0; j < indexes.length; j++) {
             ++indexes[j];
@@ -67,6 +67,8 @@
           ++k;
         }
       }
+
+
       return result;
     }
 

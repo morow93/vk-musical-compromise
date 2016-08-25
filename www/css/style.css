@@ -42,6 +42,8 @@
 .popover-members{
   margin-top: 5px !important;
   margin-right: 0px !important;
+  width: 300px !important;
+  right: 0px !important;
 }
 .popover-members .item{
   padding-right: 70px;
@@ -59,4 +61,38 @@
 .button-nav > span{
   display: inline !important;
   margin-left: 0px !important;
+}
+.fixed-track{
+  position: absolute;
+  width: 100%;
+  z-index: 9;
+  height: 54px;
+  bottom: 47px;
+}
+.fixed-track .item{
+  width: 100%;
+  background: #ddd;
+  border-top: 1px solid #B2B2B2 !important;
+  padding-right: 68px;
+}
+.fixed-track-time{
+  font-size: 17px !important;
+  left: auto;
+  background: #B8B8B8;
+  right: 7px !important;
+  border-radius: 25px;
+  max-height: 25px;
+  min-height: 25px;
+  max-width: 55px;
+  min-width: 55px;
+  padding-left: 7px;
+  padding-right: 7px;
+  margin-top: 13px;
+}
+.fixed-track-with-spinner{
+  margin-top: 4px;
+  padding-left: 6px !important;
+}
+.fixed-track-without-spinner{
+  margin-top: -2px;
 }

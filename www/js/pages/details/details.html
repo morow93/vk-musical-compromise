@@ -60,4 +60,27 @@
     </script>
 
   </ion-content>
+
+  <div class="fixed-track" ng-show="pointer.track.index >= 0">
+    <div class="item item-icon-left item-icon-right">
+        <i class="icon ion-ios-play"
+        ng-class="{'ion-ios-pause': pointer.track.playing, 'ion-ios-play': !pointer.track.playing}" ng-click="toggleTrack(pointer.track, $index)"></i>
+        <span>
+          <span ng-bind="pointer.track.artist" class="ng-binding"></span> -
+          <span ng-bind="pointer.track.title" class="ng-binding"></span>
+        </span>
+        <i class="icon fixed-track-time">
+          <span ng-if="pointer.track.currentTime == 0">
+            00:00
+          </span>
+          <span class="fixed-track-without-spinner"
+                ng-if="pointer.track.currentTime != 0 && pointer.track.currentTime" ng-bind="pointer.track.currentTime | trackTime">
+          </span>
+          <ion-spinner class="fixed-track-with-spinner"
+                       ng-if="pointer.track.currentTime != 0 && !pointer.track.currentTime" icon="dots">
+          </ion-spinner>
+        </i>
+   </div>
+  </div>
+
 </ion-view>
