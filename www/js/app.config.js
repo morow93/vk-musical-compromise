@@ -9,6 +9,7 @@
   function config($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     $ionicConfigProvider.form.checkbox("circle");
+    $ionicConfigProvider.tabs.position("bottom");
 
     $stateProvider
       .state('tab', {
