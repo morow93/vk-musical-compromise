@@ -67,12 +67,12 @@
   width: 100%;
   z-index: 9;
   height: 54px;
-  bottom: 47px;
+  bottom: -2px;
 }
 .fixed-track .item{
   width: 100%;
   background: #ddd;
-  border-top: 1px solid #B2B2B2 !important;
+  border-top: 1px solid #B2B2B2 !important;  
   padding-right: 68px;
 }
 .fixed-track-time{
@@ -87,7 +87,7 @@
   min-width: 55px;
   padding-left: 7px;
   padding-right: 7px;
-  margin-top: 13px;
+  margin-top: 14px;
 }
 .fixed-track-with-spinner{
   margin-top: 4px;
