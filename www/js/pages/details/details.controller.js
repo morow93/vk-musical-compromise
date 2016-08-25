@@ -10,6 +10,7 @@
 
       $scope.openPopoverMembers = audioManager.openPopoverMembers;
       $scope.toggleTrack = audioManager.toggleTrack;
+      $scope.activate = audioManager.activate;
 
       $scope.$on("$ionicView.enter", function() {
         audioManager.activate($scope);

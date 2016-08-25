@@ -25,26 +25,29 @@
 
       runInner();
 
-      function runInner(){
-
+      function runInner(error){
         ++counter;
         if (counter > 5) {
-          deferred.reject({ error: true });
+          deferred.reject(error);
         }else{
           var promises = functions();
-
           authService.run().then(function(){
             return $q.all(promises);
           }).then(function(res) {
             var result = [];
+            var errors = [];
             var keepGoing = true;
             angular.forEach(res, function(value, key){
               if (keepGoing){
-                if (!angular.isDefined(value.error) && angular.isArray(value.response)){
+                if (!angular.isDefined(value.error)){
                   result.push(value.response);
-                }else if (value.error/*&& value.error["error_code"] === 5*/){
-                  // access_token was given to another ip address
-                  keepGoing = false;
+                }else{
+                  // need resolve errors when they are not critical
+                  errors.push(value.error);
+                  if (value.error["error_code"] === 5){
+                    // some trouble with authenitcation
+                    keepGoing = false;
+                  }
                 }
               }
             });
@@ -52,10 +55,10 @@
               deferred.resolve(result);
             }else{
               authService.clear();
-              runInner();
+              runInner(errors);
             }
           }).catch(function(err){
-            runInner();
+            runInner(err);
           });
         }
 

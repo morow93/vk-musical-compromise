@@ -4,9 +4,9 @@
 
   angular.module("core.services").factory("MemberService", memberService);
 
-  memberService.$inject = ["$q", "$http", "localStorageService", "values"];
+  memberService.$inject = ["$q", "$http", "localStorageService", "values", "ERRORS"];
 
-  function memberService($q, $http, localStorageService, values) {
+  function memberService($q, $http, localStorageService, values, ERRORS) {
 
     var service = {
       get: get
@@ -14,6 +14,7 @@
 
     function get() {
       var deferred = $q.defer();
+      
       var userInfo = localStorageService.get("authInfo");
       if (userInfo){
         $http.get(values.baseVk +
@@ -24,8 +25,9 @@
           deferred.reject(err);
         });
       }else{
-        deferred.reject({ error: true });
+        deferred.reject(ERRORS.USER_INFO);
       }
+
       return deferred.promise;
     }
 

@@ -104,7 +104,10 @@
 
         var confirmPopup = $ionicPopup.show({
           title: 'New Playlist',
-          template: '<form name="forms.popupForm"><input type="text" name="playlistTitle" ng-model="popupData.playlistTitle" placeholder="Choose playlist name" /></form>',
+          template:
+            '<form name="forms.popupForm">' +
+              '<input type="text" name="playlistTitle" ng-model="popupData.playlistTitle" placeholder="Choose playlist name" />' +
+            '</form>',
           scope: $scope,
           buttons: [
             { text: 'Cancel' },

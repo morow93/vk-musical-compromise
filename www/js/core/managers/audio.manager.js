@@ -19,7 +19,9 @@
 
     function activate(scope) {
 
-      manager.scope = scope;
+      if (scope){
+        manager.scope = scope;
+      }
 
       // Needed for view
       manager.scope.pointer = $rootScope.pointer = {};
@@ -76,7 +78,7 @@
             return loadedUsers.indexOf(it.uid) < 0;
         });
         if (notLoadedUsers && notLoadedUsers.length > 0){
-          var notLoadedTitle = "Tracks weren't downloaded for";
+          var notLoadedTitle = "Tracks weren't loaded for";
           angular.forEach(notLoadedUsers, function(it, i) {
             var separator = ((i + 1) !== notLoadedUsers.length) ? "," : ".";
             notLoadedTitle += " " + it["first_name"] + " " + it["last_name"] + separator;

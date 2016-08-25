@@ -4,9 +4,9 @@
 
   angular.module("core.services").factory("AudioService", audioService);
 
-  audioService.$inject = ["$q", "$http", "localStorageService", "values"];
+  audioService.$inject = ["$q", "$http", "localStorageService", "values", "ERRORS"];
 
-  function audioService($q, $http, localStorageService, values) {
+  function audioService($q, $http, localStorageService, values, ERRORS) {
 
     var service = {
       get: get,
@@ -14,6 +14,7 @@
     };
 
     function get(user) {
+      
       var deferred = $q.defer();
       var userInfo = localStorageService.get("authInfo");
       if (userInfo){
@@ -30,7 +31,7 @@
           deferred.reject(err);
         });
       }else{
-        deferred.reject({ error: true });
+        deferred.reject(ERRORS.USER_INFO);
       }
       return deferred.promise;
     }
