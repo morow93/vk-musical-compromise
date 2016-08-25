@@ -58,7 +58,7 @@
         $rootScope.showNewPlaylistCard = false;
       }
 
-      function checkMember() {
+      function checkMember(member) {
         // Close keyboard
         document.activeElement.blur();
 
@@ -68,6 +68,11 @@
             counter++;
           }
         });
+        if (counter > 10){
+          toastService.show("Can not select more than 10 people");
+          member.isChecked = false;
+          return;
+        }
 
         $scope.selectedMembersCounter = counter;
 
