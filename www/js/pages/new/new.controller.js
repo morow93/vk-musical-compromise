@@ -15,12 +15,17 @@
       $scope.create = create;
       $scope.uncheck = uncheck;
       $scope.activate = activate;
+      $scope.resetSearch = resetSearch;
+
+      $scope.searchModel = {};
 
       $scope.$on("$ionicView.enter", function(e) {
         activate();
       });
 
       function activate(refreshing) {
+		
+		resetSearch();
 
         $scope.loaded = false;
         $scope.refreshing = refreshing === true;
@@ -59,8 +64,8 @@
       }
 
       function checkMember(member) {
-        // Close keyboard
-        document.activeElement.blur();
+
+        closeKeyboard();
 
         var counter = 0;
         angular.forEach($scope.members, function(value, key) {
@@ -172,6 +177,15 @@
           };
 
         }
+      }
+
+      function closeKeyboard() {
+        document.activeElement.blur();
+      }
+
+      function resetSearch() {
+        closeKeyboard();
+        $scope.searchModel.term = "";
       }
 
     }
