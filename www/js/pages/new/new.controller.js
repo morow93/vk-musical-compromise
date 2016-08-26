@@ -24,8 +24,8 @@
       });
 
       function activate(refreshing) {
-		
-		resetSearch();
+
+		    resetSearch();
 
         $scope.loaded = false;
         $scope.refreshing = refreshing === true;
